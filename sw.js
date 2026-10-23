@@ -1,4 +1,4 @@
-const CACHE = "masjid-hisab-pwa-v1";
+const CACHE = "masjid-hisab-pwa-v3-cloud-fix";
 const FILES = [
   "./",
   "./index.html",
