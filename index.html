@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#126b4d"><meta name="description" content="মসজিদের দান, হাদিয়া, আয়-ব্যয় ও তহবিলের হিসাব ব্যবস্থাপনা"><link rel="manifest" href="manifest.json"><link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Anek+Bangla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <title>মসজিদ পূর্ণাঙ্গ হিসাব</title>
 <style>
 
@@ -241,6 +241,49 @@ header h1{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:.2px}hea
   #receiptPrint .multi-receipt .receipt-footer{font-size:7pt!important;margin:1mm 0 0!important}
 }
 
+
+/* Green-white Islamic receipt design + stylish Bengali typography */
+#receiptPrint,.premium-receipt{font-family:"Anek Bangla","Hind Siliguri","Noto Sans Bengali",sans-serif!important}
+#receiptPrint .multi-sheet{background:#fff}
+#receiptPrint .premium-receipt{position:relative;color:#183c2c;background:linear-gradient(145deg,#fff 0%,#fbfffc 100%);border:1.5px solid #16805c;border-radius:12px;overflow:hidden;padding:4mm 5mm;box-shadow:inset 0 0 0 1px #c9e6d2}
+#receiptPrint .premium-receipt:before,#receiptPrint .premium-receipt:after{content:"❧";position:absolute;color:#239466;font-size:23pt;line-height:1;top:2mm}
+#receiptPrint .premium-receipt:before{left:3mm}#receiptPrint .premium-receipt:after{right:3mm;transform:scaleX(-1)}
+#receiptPrint .receipt-topline{display:flex;justify-content:center;align-items:center;gap:10px;color:#17724f;font-size:9pt;font-weight:700;letter-spacing:.5px;border-bottom:1px solid #d4eadb;padding-bottom:1mm}
+#receiptPrint .receipt-heading{display:grid;grid-template-columns:17mm 1fr 27mm;align-items:center;gap:3mm;padding:2mm 0}
+#receiptPrint .receipt-mosque{font-size:25pt;text-align:center;filter:saturate(.85)}
+#receiptPrint .receipt-heading-text{text-align:center;min-width:0}
+#receiptPrint .receipt-kicker{font-size:8pt;color:#4c8067;font-weight:600}
+#receiptPrint .receipt-heading h1{font-family:"Hind Siliguri","Anek Bangla",sans-serif;font-size:16pt;line-height:1.15;margin:0;color:#07543a;font-weight:700}
+#receiptPrint .receipt-heading p{font-size:7.5pt;margin:1mm 0 0;color:#557466;line-height:1.2}
+#receiptPrint .receipt-no{border:1px solid #16805c;border-radius:7px;padding:1.5mm;text-align:center;font-size:7pt;color:#176344;background:#f0faf3}
+#receiptPrint .receipt-no strong{display:block;font-size:10pt;color:#064d34}
+#receiptPrint .receipt-titlebar{display:flex;align-items:center;justify-content:center;gap:3mm;background:#0e6848;color:white;border-radius:20px;padding:1mm 3mm;margin:1mm 0 2mm}
+#receiptPrint .receipt-titlebar h2{font-family:"Hind Siliguri",sans-serif;font-size:12pt;margin:0;color:#fff;font-weight:700}
+#receiptPrint .receipt-titlebar span{color:#d8f2df}
+#receiptPrint .receipt-fields{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:2mm}
+#receiptPrint .receipt-field{border-bottom:1px dashed #9bbda7;padding:1mm 1.5mm;min-width:0}
+#receiptPrint .receipt-field span{display:block;font-size:7pt;color:#62816f}
+#receiptPrint .receipt-field b{display:block;font-size:9pt;color:#203d2e;overflow-wrap:anywhere}
+#receiptPrint .receipt-amount{margin:2mm auto;padding:2mm 4mm;text-align:center;border:1.5px solid #8fc69f;border-radius:8px;background:linear-gradient(135deg,#f2fae9,#fff);max-width:78%}
+#receiptPrint .receipt-amount .amount-label{font-size:8pt;color:#326a4b;font-weight:700}
+#receiptPrint .receipt-amount strong{display:block;font-family:"Anek Bangla",sans-serif;font-size:19pt;line-height:1.2;color:#07543a;font-weight:800}
+#receiptPrint .receipt-amount small{display:block;font-size:8pt;color:#3c674d}
+#receiptPrint .receipt-note{font-size:7.5pt;padding:1mm 2mm;background:#f7fbf8;border:1px solid #e0eee4;border-radius:5px}
+#receiptPrint .receipt-dua{margin:1.5mm auto 0;text-align:center;font-size:8pt;line-height:1.3;color:#3d7454;background:#eff9f1;border:1px solid #cce7d2;border-radius:6px;padding:1.5mm}
+#receiptPrint .premium-receipt .print-signatures{display:flex;justify-content:space-between;gap:8mm;margin-top:auto;padding-top:5mm;text-align:center;font-size:7.5pt;color:#315b43}
+#receiptPrint .premium-receipt .print-signatures span{min-width:32mm;border-top:1px solid #7fa58c;padding:1mm 2mm 0}
+#receiptPrint .receipt-bottomline{text-align:center;border-top:1px solid #d7eadd;margin-top:1mm;padding-top:1mm;font-size:6.5pt;color:#688775}
+@media print{
+ @page{size:A4 portrait;margin:9mm}
+ #receiptPrint .multi-sheet{height:279mm!important;gap:3mm!important}
+ #receiptPrint .premium-receipt{border-radius:2mm!important;padding:3mm 4mm!important;break-inside:avoid!important;page-break-inside:avoid!important}
+ #receiptPrint .receipt-heading{grid-template-columns:16mm 1fr 25mm!important}
+ #receiptPrint .receipt-heading h1{font-size:15pt!important}
+ #receiptPrint .receipt-amount strong{font-size:18pt!important}
+ #receiptPrint .premium-receipt .print-signatures{padding-top:4mm!important}
+ *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+}
+
 </style></head>
 <body><header><h1 id="appTitle">🕌 মসজিদ পূর্ণাঙ্গ হিসাব</h1><p>দান • হাদিয়া • আয়-ব্যয় • তহবিল • মাসিক রিপোর্ট</p></header>
 <div class="wrap"><div class="tabs no-print" id="tabs"><button class="active" data-tab="home">ড্যাশবোর্ড</button><button data-tab="transactions">আয়-ব্যয় / দান</button><button data-tab="hadia">মাসিক হাদিয়া</button><button data-tab="funds">তহবিল</button><button data-tab="reports">রিপোর্ট</button><button data-tab="backup">ব্যাকআপ</button><button data-tab="settings">সেটিংস</button></div>
@@ -357,25 +400,30 @@ function renderTx(){let m=$('filterMonth').value,typ=$('filterType').value;let t
 $('txForm').onsubmit=e=>{e.preventDefault();const t={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),type:$('type').value,date:$('date').value,amount:Number($('amount').value),category:$('category').value,account:'cash',refno:$('refno').value.trim(),person:$('person').value.trim(),note:$('note').value.trim()};if(!(t.amount>0))return alert('সঠিক টাকার পরিমাণ দিন');if(!t.refno)t.refno=(data.settings.prefix||'MZ')+'-'+String(data.nextReceipt++).padStart(5,'0');data.transactions.push(t);if(t.type==='income'&&t.category==='দান')setTimeout(()=>printReceipt(t.id),150);$('txForm').reset();$('date').value=today();save();alert('লেনদেন সংরক্ষণ হয়েছে। রসিদ/ভাউচার: '+t.refno)};$('clearTx').onclick=()=>$('txForm').reset();
 function editTx(id){const t=data.transactions.find(x=>String(x.id)===String(id));if(!t)return alert('লেনদেনটি পাওয়া যায়নি।');const date=prompt('লেনদেনের তারিখ লিখুন (YYYY-MM-DD):',t.date||today());if(date===null)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number(date.slice(5,7))<1||Number(date.slice(5,7))>12||Number(date.slice(8,10))<1||Number(date.slice(8,10))>31)return alert('সঠিক তারিখ দিন, যেমন 2026-10-25।');const category=prompt('খাত লিখুন:',t.category||'অন্যান্য');if(category===null)return;if(!category.trim())return alert('খাত খালি রাখা যাবে না।');const amountText=prompt('টাকার পরিমাণ লিখুন:',String(t.amount??''));if(amountText===null)return;const amount=Number(amountText.replace(/,/g,''));if(!Number.isFinite(amount)||amount<=0)return alert('সঠিক টাকার পরিমাণ দিন।');if(!confirm('তারিখ, খাত ও টাকার পরিবর্তন সংরক্ষণ করবেন?'))return;t.date=date;t.category=category.trim();t.amount=amount;save();alert('লেনদেনের তারিখ, খাত ও টাকার পরিমাণ আপডেট হয়েছে।')}
 function deleteTx(id){if(!confirm('এই লেনদেন মুছবেন? এই কাজটি আগের ব্যাকআপ থেকে ছাড়া ফেরানো যাবে না।'))return;data.transactions=data.transactions.filter(t=>t.id!==id);save()}
+function receiptCard(t,s){
+ const title=t.category==='মাসিক হাদিয়া'?'মাসিক হাদিয়া জমার রসিদ':t.type==='expense'?'ব্যয় / বেতন প্রদানের রসিদ':(t.category==='নির্মাণ তহবিল'||t.category==='বিশেষ তহবিল')?'তহবিলে জমার রসিদ':'মসজিদ দান রশিদ';
+ const personLabel=t.type==='expense'?'প্রাপক':'দাতার নাম';
+ return `<section class="multi-receipt premium-receipt">
+  <div class="receipt-topline"><span>✦</span><span>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span>✦</span></div>
+  <div class="receipt-heading"><div class="receipt-mosque" aria-hidden="true">🕌</div><div class="receipt-heading-text"><div class="receipt-kicker">আল্লাহর সন্তুষ্টির জন্য দান করুন</div><h1>${esc(s.name||'মসজিদ')}</h1><p>${esc(s.address||'')}${s.phone?' • '+esc(s.phone):''}</p></div><div class="receipt-no">রসিদ নং<strong>${esc(t.refno||'—')}</strong></div></div>
+  <div class="receipt-titlebar"><span>❧</span><h2>${title}</h2><span>❧</span></div>
+  <div class="receipt-fields"><div class="receipt-field"><span>তারিখ</span><b>${esc(t.date||'—')}</b></div><div class="receipt-field"><span>${personLabel}</span><b>${esc(t.person||'নাম উল্লেখ নেই')}</b></div><div class="receipt-field"><span>দান / খাত</span><b>${esc(t.category||'—')}</b></div></div>
+  <div class="receipt-amount"><div class="amount-label">${t.type==='expense'?'প্রদত্ত টাকার পরিমাণ':'প্রাপ্ত টাকার পরিমাণ'}</div><strong>${money(t.amount)}</strong><small>কথায়: ${numberWords(t.amount)} টাকা মাত্র</small></div>
+  <div class="receipt-note"><b>বিবরণ:</b> ${esc(t.note||'—')}</div>
+  <div class="receipt-dua">আপনার সহযোগিতার জন্য আন্তরিক ধন্যবাদ।<br>আল্লাহ তাআলা আপনাকে উত্তম প্রতিদান দান করুন। আমিন।</div>
+  <div class="print-signatures"><span>${t.type==='expense'?'গ্রহণকারীর স্বাক্ষর':'দাতার স্বাক্ষর'}</span><span>দায়িত্বপ্রাপ্ত স্বাক্ষর</span></div>
+  <div class="receipt-bottomline">মসজিদ কমিটির পক্ষ থেকে কৃতজ্ঞতা • রসিদটি সংরক্ষণ করুন</div>
+ </section>`;
+}
 function printReceiptBatch(items){
  const s=data.settings;
- const cards=items.map(t=>`<section class="multi-receipt">
-  <div class="print-brand"><div class="mark">🕌</div><div><h1>${esc(s.name||'মসজিদ')}</h1><p>${esc(s.address||'')} ${s.phone?' • '+esc(s.phone):''}</p></div></div>
-  <h2 class="print-title">${t.category==='মাসিক হাদিয়া'?'মাসিক হাদিয়া জমার রসিদ':t.type==='expense'?'ব্যয় / বেতন প্রদানের রসিদ':(t.category==='নির্মাণ তহবিল'||t.category==='বিশেষ তহবিল')?'তহবিলে জমার রসিদ':'দান গ্রহণের রসিদ'}</h2>
-  <div class="print-meta"><span>রসিদ নং: <b>${esc(t.refno||'—')}</b></span><span>তারিখ: <b>${esc(t.date||'—')}</b></span></div>
-  <p>${t.type==='expense'?'প্রদান করা হলো':'গ্রহণ করা হলো'}: <b>${esc(t.person||'নাম উল্লেখ নেই')}</b>${t.type==='expense'?'কে।':'এর নিকট থেকে।'}</p>
-  <p>খাত: <b>${esc(t.category||'—')}</b></p>
-  <div class="print-total"><div>টাকার পরিমাণ</div><div class="amount">${money(t.amount)}</div><div>কথায়: ${numberWords(t.amount)} টাকা মাত্র</div></div>
-  <div class="print-note"><b>বিবরণ:</b> ${esc(t.note||'—')}</div>
-  <div class="print-signatures"><span>গ্রহণকারীর স্বাক্ষর</span><span>কোষাধ্যক্ষ / সম্পাদকের স্বাক্ষর</span></div>
-  <p class="receipt-footer" style="text-align:center;color:#527465">আল্লাহ এই দান কবুল করুন • রসিদটি সংরক্ষণ করুন</p>
- </section>`).join('');
+ const cards=items.map(t=>receiptCard(t,s)).join('');
  $('receiptPrint').classList.remove('hide');
  $('receiptPrint').innerHTML=`<div class="multi-sheet">${cards}</div>`;
  window.print();
  setTimeout(()=>{$('receiptPrint').classList.add('hide');$('receiptPrint').innerHTML=''},1500);
 }
-function printReceipt(id){const t=data.transactions.find(x=>x.id===id);if(!t)return;const s=data.settings;$('receiptPrint').classList.remove('hide');$('receiptPrint').innerHTML=`<div style="max-width:760px;margin:0 auto;border:1.5px solid #16805c;padding:18px;border-radius:10px;font-family:'Hind Siliguri','Noto Sans Bengali',sans-serif"><div class="print-brand"><div class="mark">🕌</div><div><h1>${esc(s.name||'মসজিদ')}</h1><p>${esc(s.address||'')} ${s.phone?' • '+esc(s.phone):''}</p></div></div><h2 class="print-title">${t.category==='মাসিক হাদিয়া'?'মাসিক হাদিয়া জমার রসিদ':t.type==='expense'?'ব্যয় / বেতন প্রদানের রসিদ':(t.category==='নির্মাণ তহবিল'||t.category==='বিশেষ তহবিল')?'তহবিলে জমার রসিদ':'দান গ্রহণের রসিদ'}</h2><div class="print-meta"><span>রসিদ নং: <b>${esc(t.refno)}</b></span><span>তারিখ: <b>${esc(t.date)}</b></span></div><p>${t.type==='expense'?'প্রদান করা হলো':'গ্রহণ করা হলো'}: <b>${esc(t.person||'নাম উল্লেখ নেই')}</b>${t.type==='expense'?'কে।':'এর নিকট থেকে।'}</p><p>খাত: <b>${esc(t.category)}</b></p><div class="print-total"><div>প্রাপ্ত টাকার পরিমাণ</div><div class="amount">${money(t.amount)}</div><div>কথায়: ${numberWords(t.amount)} টাকা মাত্র</div></div><div class="print-note"><b>বিবরণ:</b> ${esc(t.note||'—')}</div><div class="print-signatures"><span>গ্রহণকারীর স্বাক্ষর</span><span>কোষাধ্যক্ষ / সম্পাদকের স্বাক্ষর</span></div><p style="text-align:center;color:#527465;font-size:10px;margin-top:22px">আল্লাহ এই দান কবুল করুন • রসিদটি সংরক্ষণ করুন</p></div>`;window.print();setTimeout(()=>$('receiptPrint').classList.add('hide'),1500)}
+function printReceipt(id){const t=data.transactions.find(x=>x.id===id);if(!t)return;printReceiptBatch([t])}
 function numberWords(num){let n=Math.floor(Number(num)||0);if(n===0)return 'শূন্য';const ones=['','এক','দুই','তিন','চার','পাঁচ','ছয়','সাত','আট','নয়','দশ','এগারো','বারো','তেরো','চৌদ্দ','পনেরো','ষোলো','সতেরো','আঠারো','উনিশ'];const tens=['','','বিশ','ত্রিশ','চল্লিশ','পঞ্চাশ','ষাট','সত্তর','আশি','নব্বই'];function under100(x){return x<20?ones[x]:tens[Math.floor(x/10)]+(x%10?ones[x%10]:'')}let out=[];let units=[[10000000,'কোটি'],[100000,'লক্ষ'],[1000,'হাজার'],[100,'শত']];for(const [v,label] of units){if(n>=v){let q=Math.floor(n/v);out.push((q<100?under100(q):String(q))+' '+label);n%=v}}if(n)out.push(under100(n));return out.join(' ')}
 function calcMemberHadiaSummary(member,through){if(!through)return {months:0,totalDue:0,collected:0,remaining:0};const [sy,sm]=member.start.split('-').map(Number),[ey,em]=through.split('-').map(Number);const months=Math.max(0,(ey-sy)*12+em-sm+1),totalDue=months*Number(member.due||0),collected=data.payments.filter(p=>p.memberId===member.id&&p.month>=member.start&&p.month<=through).reduce((a,p)=>a+Number(p.amount||0),0);return {months,totalDue,collected,remaining:Math.max(0,totalDue-collected)}}function calcMemberDue(member,through){return calcMemberHadiaSummary(member,through).remaining}function calcAllDue(m){return data.members.reduce((a,x)=>a+calcMemberDue(x,m),0)}
 $('memberForm').onsubmit=e=>{e.preventDefault();data.members.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name:$('memberName').value.trim(),phone:$('memberPhone').value.trim(),due:Number($('memberDue').value),start:$('memberStart').value});$('memberForm').reset();$('memberStart').value='2024-10';save();alert('হাদিয়াদাতার তথ্য সংরক্ষিত হয়েছে')};
