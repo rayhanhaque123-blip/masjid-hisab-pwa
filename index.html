@@ -125,6 +125,29 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 10px}
   button,input,select,textarea{display:none!important}
 }
 
+
+/* Dashboard UI refresh: prominent readable amounts and responsive summary tiles */
+#summary{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:8px 0 22px}
+#summary .summary-card{min-height:150px;padding:17px 18px 14px;border:1px solid #dce9e1;border-radius:20px;background:#fff;box-shadow:0 7px 22px rgba(15,67,45,.07);display:flex;flex-direction:column;justify-content:space-between;gap:10px;position:relative;isolation:isolate}
+#summary .summary-card:after{width:110px;height:110px;right:-40px;top:auto;bottom:-55px;background:rgba(255,255,255,.20);z-index:-1}
+#summary .summary-top{display:flex;align-items:center;gap:9px;min-width:0}
+#summary .summary-icon{width:35px;height:35px;flex:0 0 35px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.22);font-size:19px;font-weight:800}
+#summary .summary-top .k{font-size:14px;font-weight:700;line-height:1.35;flex:1}
+#summary .summary-arrow{font-size:16px;opacity:.75}
+#summary .summary-card .v{font-size:clamp(27px,3vw,36px);font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:3px 0;white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#summary .tap-hint{font-size:12px;font-weight:600;opacity:.82;margin:0;display:flex;justify-content:space-between;align-items:center}
+#summary .summary-card:nth-child(1){background:linear-gradient(135deg,#087b55,#16a875);color:#fff;border-color:#0b8a60}
+#summary .summary-card:nth-child(2){background:linear-gradient(135deg,#a83a35,#d85c51);color:#fff;border-color:#bd4941}
+#summary .summary-card:nth-child(3){background:linear-gradient(135deg,#155b9a,#2586c5);color:#fff;border-color:#246eaa}
+#summary .summary-card:nth-child(4){background:linear-gradient(135deg,#4b568d,#747fc0);color:#fff;border-color:#606ca7}
+#summary .summary-card:nth-child(5){background:linear-gradient(135deg,#a36512,#d99a28);color:#fff;border-color:#b97b1d}
+#summary .summary-card:nth-child(6){background:linear-gradient(135deg,#087b70,#18a99a);color:#fff;border-color:#0d9387}
+#summary .summary-card:nth-child(7){background:linear-gradient(135deg,#59428d,#8768bd);color:#fff;border-color:#6e55a5}
+#summary .summary-card .k,#summary .summary-card .v,#summary .summary-card .tap-hint{color:#fff}
+#summary .summary-card:hover{transform:translateY(-3px);box-shadow:0 13px 28px rgba(15,67,45,.17)}
+@media(max-width:850px){#summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#summary .summary-card{min-height:132px;padding:14px;border-radius:17px}#summary .summary-card .v{font-size:clamp(25px,5.2vw,32px)}}
+@media(max-width:380px){#summary{gap:8px}#summary .summary-card{min-height:126px;padding:11px 10px}#summary .summary-icon{width:30px;height:30px;flex-basis:30px;border-radius:10px;font-size:16px}#summary .summary-top .k{font-size:12px}#summary .summary-card .v{font-size:23px}#summary .tap-hint{font-size:10px}}
+
 </style></head>
 <body><header><h1 id="appTitle">🕌 মসজিদ পূর্ণাঙ্গ হিসাব</h1><p>দান • হাদিয়া • আয়-ব্যয় • তহবিল • মাসিক রিপোর্ট</p></header>
 <div class="wrap"><div class="tabs no-print" id="tabs"><button class="active" data-tab="home">ড্যাশবোর্ড</button><button data-tab="transactions">আয়-ব্যয় / দান</button><button data-tab="hadia">মাসিক হাদিয়া</button><button data-tab="funds">তহবিল</button><button data-tab="reports">রিপোর্ট</button><button data-tab="backup">ব্যাকআপ</button><button data-tab="settings">সেটিংস</button></div>
@@ -222,7 +245,7 @@ function go(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggl
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function txSum(type,filter=()=>true){return data.transactions.filter(t=>t.type===type&&filter(t)).reduce((a,t)=>a+Number(t.amount),0)}
 function balances(){return {cash:Number(data.settings.openingCash||0)+txSum('income',t=>t.account!=='bank')-txSum('expense',t=>t.account!=='bank'),bank:Number(data.settings.bankBalance??data.settings.openingBank??0)}}
-function render(){ $('appTitle').textContent='🕌 '+(data.settings.name||'মসজিদ পূর্ণাঙ্গ হিসাব'); const b=balances(),income=txSum('income'),expense=txSum('expense'),due=calcAllDue(monthNow()),paid=data.payments.reduce((a,p)=>a+Number(p.amount||0),0),monthly=data.members.reduce((a,m)=>a+Number(m.due||0),0);$('summary').innerHTML=[['মোট আয়',money(income)],['মোট ব্যয়',money(expense)],['নগদ ব্যালেন্স',money(b.cash)],['ব্যাংক জমা (স্থির)',money(b.bank)],['মোট হাদিয়া বাকি',money(due)],['মোট হাদিয়া জমা',money(paid)],['বর্তমান মাসিক হাদিয়া',money(monthly)]].map(([k,v],i)=>`<button type="button" class="card summary-card" data-summary-detail="${i}" aria-label="${k} বিস্তারিত দেখুন"><span class="k">${k}</span><span class="v">${v}</span><span class="tap-hint">বিস্তারিত দেখতে চাপ দিন ›</span></button>`).join('');renderTx();renderRecent();renderFunds();renderMembers();renderDefaultMembers();populateYears();fillSettings() }
+function render(){ $('appTitle').textContent='🕌 '+(data.settings.name||'মসজিদ পূর্ণাঙ্গ হিসাব'); const b=balances(),income=txSum('income'),expense=txSum('expense'),due=calcAllDue(monthNow()),paid=data.payments.reduce((a,p)=>a+Number(p.amount||0),0),monthly=data.members.reduce((a,m)=>a+Number(m.due||0),0);$('summary').innerHTML=[['মোট আয়',money(income),'↗','income'],['মোট ব্যয়',money(expense),'↘','expense'],['নগদ ব্যালেন্স',money(b.cash),'৳','cash'],['ব্যাংক জমা (স্থির)',money(b.bank),'▣','bank'],['মোট হাদিয়া বাকি',money(due),'◷','due'],['মোট হাদিয়া জমা',money(paid),'✓','paid'],['বর্তমান মাসিক হাদিয়া',money(monthly),'☾','monthly']].map(([k,v,ico,kind],i)=>`<button type="button" class="card summary-card summary-${kind}" data-summary-detail="${i}" aria-label="${k} বিস্তারিত দেখুন"><span class="summary-top"><span class="summary-icon">${ico}</span><span class="k">${k}</span><span class="summary-arrow">↗</span></span><span class="v">${v}</span><span class="tap-hint">বিস্তারিত দেখুন <b>→</b></span></button>`).join('');renderTx();renderRecent();renderFunds();renderMembers();renderDefaultMembers();populateYears();fillSettings() }
 function summaryDetailTable(title,rows){if(!rows.length)return `<div class="empty">${title} এর কোনো তথ্য নেই।</div>`;return `<div class="tablewrap"><table><thead><tr>${Object.keys(rows[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${Object.values(r).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
 function showSummaryDetail(index){const modal=$('summaryDetail'),title=$('summaryDetailTitle'),body=$('summaryDetailContent');const b=balances(),through=monthNow();let html='';const all=[...data.transactions].sort((a,z)=>z.date.localeCompare(a.date));
  if(index===0||index===1){const type=index===0?'income':'expense',label=index===0?'মোট আয়ের বিবরণ':'মোট ব্যয়ের বিবরণ',items=all.filter(t=>t.type===type);title.textContent=label;html=`<div class="detail-total">${money(txSum(type))}</div><p class="hint">তারিখ, খাত ও বিবরণ অনুযায়ী সব ${index===0?'আয়':'ব্যয়'} লেনদেন।</p>${txTable(items)}`}
