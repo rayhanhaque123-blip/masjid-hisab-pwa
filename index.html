@@ -1,587 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#126b4d"><meta name="description" content="মসজিদের দান, হাদিয়া, আয়-ব্যয় ও তহবিলের হিসাব ব্যবস্থাপনা"><link rel="manifest" href="manifest.json"><link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Noto+Sans+Bengali:wght@400;500;600;700;800&family=Anek+Bangla:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<title>মসজিদ পূর্ণাঙ্গ হিসাব</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#064b39"><title>মসজিদ হিসাব ব্যবস্থাপনা</title>
 <style>
-
-:root{
-  --green:#126b4d;--green2:#19845e;--green3:#0b5039;
-  --bg:#f3f8f5;--ink:#18332a;--muted:#61766d;--line:#dce8e1;
-  --white:#fff;--red:#b42318;--gold:#9a6700;--shadow:0 8px 24px rgba(19,75,51,.075);
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+:root{--deep:#032f25;--green:#087657;--green2:#0b8b68;--bg:#f0f3f9;--ink:#1e293b;--muted:#748094;--line:#e6ebf1;--white:#fff;--red:#dc4545;--gold:#f7eec8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:'Hind Siliguri',sans-serif}
+.sidebar{position:fixed;inset:0 auto 0 0;width:215px;background:var(--deep);color:white;padding:17px 13px;display:flex;flex-direction:column;z-index:10}
+.logo{font-weight:700;font-size:17px;margin:0 0 22px;padding:0 4px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#e1eee9;text-align:left;padding:11px 10px;border-radius:8px;font:500 14px 'Hind Siliguri';cursor:pointer}.nav button.active,.nav button:hover{background:#087657;color:white}.account{margin-top:auto;background:#07523f;border-radius:9px;padding:10px;font-size:11px;line-height:1.7}.account button{width:100%;background:#df2626;color:#fff;border:0;padding:7px;border-radius:6px;margin-top:8px}
+main{margin-left:215px;padding:20px;max-width:1500px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.topbar strong{font-size:21px}.topbar button{border:0;background:#fff;border-radius:8px;padding:9px 12px;color:var(--green)}
+.notice{background:#fff2c8;color:#806128;border-radius:8px;padding:9px 12px;font-size:12px;margin-bottom:14px}
+.page{display:none}.page.active{display:block}.pagehead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:5px 0 15px}.pagehead h2{font-size:21px;margin:0}.muted{color:var(--muted);font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.card{background:white;border:1px solid #e9edf3;border-radius:14px;padding:15px;box-shadow:0 3px 12px #1c34400a;margin-bottom:13px}.stat{display:flex;align-items:center;gap:12px;min-height:95px}.stat .ico{width:42px;height:42px;border-radius:12px;background:#e9edff;color:#5966bd;display:grid;place-items:center;font-size:20px}.stat:nth-child(2) .ico{background:#d8f7e9;color:#119568}.stat:nth-child(3) .ico{background:#ffe5e5;color:#cf4646}.stat:nth-child(4){background:#07543f;color:#fff}.stat:nth-child(4) .ico{background:#ffffff20;color:white}.stat small{display:block;color:var(--muted);font-size:12px}.stat:nth-child(4) small{color:#d2e8df}.stat strong{display:block;font-size:24px;color:var(--green);margin-top:3px}.stat:nth-child(4) strong{color:white}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}.card h3{font-size:16px;margin:0 0 12px}.jumma{background:#fffdf2;border:1px solid #f0e6bd}.jumma .jummaGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.jummaGrid div{background:#fff9df;padding:10px;border-radius:9px}.jummaGrid small{display:block;color:#8b7950}.jummaGrid b{color:#7a5319;font-size:19px}
+.viewerCode{font-size:22px;letter-spacing:2px;font-weight:700;color:#166a4d;background:#e8f8f0;padding:8px 14px;border-radius:8px;display:inline-block;margin:4px 0}
+button,.btn{cursor:pointer;font:500 13px 'Hind Siliguri';border:0;border-radius:7px;padding:9px 13px;background:var(--green);color:white}.secondary{background:#edf6f2;color:var(--green)}.danger{background:#fff0ef;color:#c43b3b}.outline{background:white;color:var(--green);border:1px solid #b8d4c9}
+.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0 12px}input,select,textarea{font:13px 'Hind Siliguri';padding:9px 10px;border:1px solid #dce4eb;border-radius:8px;background:#fff;color:var(--ink);max-width:100%}label{display:block;font-size:12px;color:var(--muted);margin:0 0 4px}.field{min-width:0}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.formgrid .wide{grid-column:1/-1}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:600px}th{background:#043b2e;color:white;text-align:left;font-weight:600}td,th{padding:10px 9px;border-bottom:1px solid var(--line)}td{background:#fff}tr:last-child td{border-bottom:0}.tablewrap{overflow:auto;border-radius:10px;border:1px solid var(--line)}.empty{text-align:center;color:var(--muted);padding:22px;background:#fff}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.chart{height:190px;display:flex;align-items:end;gap:8px;padding:12px 8px 0;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to bottom,transparent 0,transparent 36px,#edf0f3 37px)}.barbox{height:100%;flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center;gap:5px;min-width:0}.bar{width:55%;min-width:8px;background:#17ad83;border-radius:4px 4px 0 0}.bar.exp{background:#e35b5b}.barlabel{font-size:10px;color:#738094;white-space:nowrap}
+.months{display:grid;grid-template-columns:repeat(12,minmax(85px,1fr));gap:6px;overflow:auto}.monthcell{background:#f7faf9;border:1px solid var(--line);padding:8px;border-radius:8px;text-align:center}.monthcell b{display:block;font-size:12px}.monthcell small{color:var(--muted);font-size:10px}
+.pill{font-size:11px;border-radius:20px;background:#e6f6ee;color:#087657;padding:3px 8px}
+.menu-toggle{display:none!important}
+.menu-backdrop{display:none}
+@media(max-width:800px){
+.sidebar{width:255px;padding:17px 13px;transform:translateX(-105%);transition:transform .24s ease;box-shadow:8px 0 30px #001d1640}
+body.menu-open .sidebar{transform:translateX(0)}
+body.menu-open .menu-backdrop{display:block;position:fixed;inset:0;background:#001b16a6;z-index:9}
+.logo{font-size:17px;text-align:left}
+.nav button{font-size:14px;text-align:left;padding:11px 10px}
+.nav button:first-letter{font-size:inherit}
+.account{font-size:11px;padding:10px}
+.account button{font-size:13px}
+.account button:after{content:none}
+.account:before{content:none}
+main{margin-left:0;padding:12px;max-width:none}
+.menu-toggle{display:inline-flex!important;align-items:center;justify-content:center;background:#fff;color:var(--green);font-size:25px;line-height:1;width:40px;height:40px;padding:0;border:1px solid var(--line);border-radius:10px}
+.topbar{position:sticky;top:0;z-index:8;background:var(--bg);padding:5px 0 10px}
+.topbar strong{font-size:18px}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.two{grid-template-columns:1fr}
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:linear-gradient(180deg,#edf7f1 0,#f7faf8 240px,var(--bg) 100%);color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;font-size:15px;line-height:1.55}
-header{background:linear-gradient(125deg,#084b35 0%,#126b4d 55%,#24a06e 100%);color:white;padding:20px 18px 17px;position:sticky;top:0;z-index:4;box-shadow:0 8px 22px rgba(9,61,42,.18);border-bottom:1px solid rgba(255,255,255,.18)}
-header h1{margin:0;font-size:clamp(21px,3vw,28px);font-weight:700;letter-spacing:.1px}
-header p{margin:5px 0 0;font-size:13px;opacity:.9;letter-spacing:.1px}
-.wrap{max-width:1160px;margin:auto;padding:16px}
-.tabs{display:flex;gap:8px;overflow:auto;padding:10px 2px 14px;position:sticky;top:83px;background:rgba(243,248,245,.94);backdrop-filter:blur(12px);z-index:3;scrollbar-width:thin}
-.tabs button{white-space:nowrap;border:1px solid #d5e6dc;border-radius:999px;background:#fff;color:var(--green);padding:10px 15px;font-weight:700;box-shadow:0 2px 7px rgba(22,72,49,.035);transition:transform .18s,background .18s,box-shadow .18s}
-.tabs button:hover{transform:translateY(-1px);box-shadow:0 5px 12px rgba(22,72,49,.08)}
-.tabs button.active{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff;border-color:transparent;box-shadow:0 5px 13px rgba(18,107,77,.22)}
-.panel{display:none;animation:fadeIn .22s ease}
-.panel.active{display:block}
-@keyframes fadeIn{from{opacity:.55;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px}
-.card{background:rgba(255,255,255,.97);border:1px solid rgba(211,229,218,.95);border-radius:18px;padding:17px;box-shadow:var(--shadow)}
-#summary .card{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#f8fcf9 100%);padding:17px 16px}
-#summary .card:after{content:"";position:absolute;width:62px;height:62px;right:-24px;top:-25px;border-radius:50%;background:rgba(36,160,110,.08)}
-.card .k{font-size:13px;color:var(--muted);font-weight:600}
-.card .v{font-size:clamp(20px,2.6vw,26px);font-weight:800;margin-top:5px;overflow-wrap:anywhere;color:#14583f;line-height:1.35}
-.section{margin:16px 0}
-.section h2,.card h2{font-size:19px;font-weight:700;margin:0 0 12px;color:#174d39}
-h3{font-size:17px;color:#174d39}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
-.field{display:flex;flex-direction:column;gap:6px;flex:1;min-width:140px}
-.field label{font-size:13px;color:#536e61;font-weight:700}
-input,select,textarea{width:100%;padding:12px 12px;border:1px solid #cbded2;border-radius:12px;background:#fff;color:var(--ink);font:inherit;font-size:14px;outline:none;transition:border-color .18s,box-shadow .18s}
-input:focus,select:focus,textarea:focus{border-color:#2b9b70;box-shadow:0 0 0 3px rgba(43,155,112,.13)}
-input::placeholder,textarea::placeholder{color:#9aaba2}
-button{font:inherit;cursor:pointer}
-.btn{border:1px solid transparent;background:linear-gradient(135deg,var(--green),var(--green2));color:white;padding:11px 16px;border-radius:12px;font-weight:700;box-shadow:0 4px 10px rgba(18,107,77,.12);transition:transform .16s,box-shadow .16s,filter .16s}
-.btn:hover{transform:translateY(-1px);box-shadow:0 7px 15px rgba(18,107,77,.17);filter:saturate(1.08)}
-.btn:active{transform:translateY(0)}
-.btn.secondary{background:#e8f5ed;color:var(--green);border:1px solid #cbe6d5;box-shadow:none}
-.btn.secondary:hover{background:#dff1e6}
-.btn.danger{background:#fff1f0;color:var(--red);border:1px solid #f1cbc7;box-shadow:none}
-.btn.small{padding:7px 11px;font-size:12px;border-radius:9px}
-.hint{font-size:13px;color:var(--muted);line-height:1.7}
-.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:14px;background:white;box-shadow:0 4px 16px rgba(19,75,51,.04)}
-table{border-collapse:collapse;width:100%;min-width:620px;font-size:13px}
-th,td{text-align:left;padding:12px 11px;border-bottom:1px solid #e8f0eb;vertical-align:top}
-th{background:#eaf5ee;color:#285b45;font-weight:700;white-space:nowrap}
-tbody tr:nth-child(even){background:#fbfdfb}
-tbody tr:hover{background:#f0f8f3}
-td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
-.empty{text-align:center;padding:30px 18px;color:var(--muted);background:#fff;border-radius:14px}
-.status{font-size:13px;padding:11px 13px;border-radius:12px;background:#e7f5ec;color:#17613f;margin:10px 0;border:1px solid #cde8d6}
-.status.warn{background:#fff6df;color:#855b00;border-color:#f1dfae}
-.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.pill{display:inline-block;border-radius:999px;background:#eaf5ee;color:#286346;padding:4px 9px;font-size:11px;font-weight:700}
-.hide{display:none!important}
-footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 10px}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-#receiptPrint{font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif}
-#summary .summary-card{cursor:pointer;transition:transform .16s,box-shadow .16s;border:1px solid #cfe3d6;text-align:left;width:100%;font:inherit;color:inherit}#summary .summary-card:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(19,75,51,.13)}#summary .summary-card:focus-visible{outline:3px solid #2b9b70;outline-offset:2px}#summary .tap-hint{display:block;margin-top:7px;font-size:11px;color:#638174}#summary .summary-card:after{pointer-events:none}#summaryDetail{position:fixed;inset:0;z-index:10000;background:rgba(8,35,24,.58);display:none;align-items:center;justify-content:center;padding:14px}#summaryDetail.open{display:flex}#summaryDetail .detail-box{background:#f8fbf9;width:min(100%,900px);max-height:88vh;overflow:auto;border-radius:18px;padding:18px;box-shadow:0 20px 70px #001b1080}#summaryDetail .detail-head{display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:-18px;background:#f8fbf9;padding:4px 0 12px;z-index:2;border-bottom:1px solid #dce8e1}#summaryDetail .detail-head h2{margin:0;color:#14583f;font-size:20px}#summaryDetail .detail-close{border:0;border-radius:10px;background:#e8f5ed;color:#14583f;padding:8px 13px;font-weight:700}#summaryDetail .detail-content{padding-top:12px}#summaryDetail .detail-total{font-size:22px;font-weight:800;color:#14583f;margin:4px 0 12px}@media(max-width:600px){#summaryDetail{padding:8px}#summaryDetail .detail-box{max-height:92vh;padding:13px;border-radius:14px}#summaryDetail .detail-head h2{font-size:18px}}
-@media(max-width:600px){
-  header{padding:16px 13px 13px}header h1{font-size:21px}
-  .wrap{padding:10px}.tabs{top:74px;gap:6px;padding:8px 0 12px}
-  .tabs button{padding:9px 12px;font-size:13px}
-  .card{padding:14px;border-radius:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-  #summary .card{padding:13px 11px}.card .v{font-size:18px}
-  .section h2,.card h2{font-size:18px}.field{min-width:125px}
-  input,select,textarea{padding:11px 10px}
-  .btn{padding:10px 12px}.row{gap:8px}
-}
-@media(max-width:380px){.grid{grid-template-columns:1fr 1fr}.card .v{font-size:16px}.tabs button{padding:8px 10px}}
-/* Premium Bengali print styling */
-.print-brand{display:flex;align-items:center;justify-content:center;gap:14px;text-align:center;padding:18px 16px;border-bottom:3px double #16805c;background:linear-gradient(135deg,#f0faf4,#ffffff);color:#104b36}
-.print-brand .mark{width:54px;height:54px;border:2px solid #16805c;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:27px;flex-shrink:0;background:#fff}
-.print-brand h1{font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif;font-size:25px;line-height:1.3;margin:0;font-weight:700;color:#07543a}
-.print-brand p{margin:4px 0 0;font-size:12px;color:#527465}
-.print-title{margin:18px 0 12px;text-align:center;font-size:20px;color:#07543a;font-weight:700}
-.print-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;background:#f1f8f3;border:1px solid #d4e9db;border-radius:8px;padding:10px 12px;margin:12px 0;font-size:12px}
-.print-total{margin:16px 0;padding:14px;border:1px solid #c8e4d2;border-left:5px solid #16805c;border-radius:8px;background:#f2faf5;text-align:center}
-.print-total .amount{font-size:25px;font-weight:700;color:#07543a}
-.print-note{margin-top:14px;padding:10px 12px;background:#f7faf8;border:1px solid #e0ebe4;border-radius:7px;font-size:12px}
-.print-signatures{display:flex;justify-content:space-between;gap:35px;margin-top:58px;text-align:center;font-size:12px;color:#234c3a}
-.print-signatures span{border-top:1px solid #6f8c7c;padding:7px 18px 0;min-width:180px}
-@media print{
-  @page{size:A4 portrait;margin:12mm}
-  /* Receipt printing: print only the dedicated receipt, never the dashboard behind it. */
-  body *{visibility:hidden!important}
-  #receiptPrint,#receiptPrint *{visibility:visible!important}
-  #receiptPrint{display:block!important;position:absolute!important;left:0!important;top:0!important;width:100%!important;margin:0!important;padding:0!important;background:#fff!important;color:#172c22!important}
-  #receiptPrint>div{max-width:none!important;width:100%!important;margin:0 auto!important;box-sizing:border-box!important;border:1.5px solid #16805c!important;border-radius:8px!important;padding:18px!important}
-  #receiptPrint .print-brand{display:flex!important;align-items:center!important;justify-content:center!important;gap:14px!important;text-align:center!important;padding:16px!important;border-bottom:3px double #16805c!important;background:#f0faf4!important;color:#104b36!important}
-  #receiptPrint .print-brand .mark{display:flex!important}
-  #receiptPrint .print-brand h1{font-size:23pt!important;line-height:1.3!important;margin:0!important;color:#07543a!important}
-  #receiptPrint .print-title{display:block!important;text-align:center!important;font-size:18pt!important;margin:18px 0 12px!important;color:#07543a!important}
-  #receiptPrint .print-meta{display:flex!important;justify-content:space-between!important;gap:12px!important;flex-wrap:wrap!important;background:#f1f8f3!important;border:1px solid #d4e9db!important;padding:10px 12px!important;margin:12px 0!important}
-  #receiptPrint .print-total{display:block!important;margin:16px 0!important;padding:14px!important;border:1px solid #c8e4d2!important;border-left:5px solid #16805c!important;background:#f2faf5!important;text-align:center!important}
-  #receiptPrint .print-total .amount{font-size:23pt!important;font-weight:700!important;color:#07543a!important}
-  #receiptPrint .print-note{display:block!important;margin-top:14px!important;padding:10px 12px!important;background:#f7faf8!important;border:1px solid #e0ebe4!important}
-  #receiptPrint .print-signatures{display:flex!important;justify-content:space-between!important;gap:30px!important;margin-top:58px!important;text-align:center!important}
-  #receiptPrint .print-signatures span{display:inline-block!important;border-top:1px solid #6f8c7c!important;padding:7px 12px 0!important;min-width:150px!important}
-  *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-  html,body{background:#fff!important;color:#182d24!important;font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif!important;font-size:11pt;line-height:1.5}
-  header,.tabs,.no-print,footer{display:none!important}
-  .wrap{padding:0!important;max-width:none!important;margin:0!important}
-  .panel{display:none!important;animation:none!important}
-  .panel.active{display:block!important}
-  #receiptPrint{display:block!important;font-family:"Hind Siliguri","Noto Sans Bengali",sans-serif!important;color:#172c22}
-  #receiptPrint table,.panel.active table{width:100%;min-width:0!important;border-collapse:collapse!important;font-size:9.5pt;box-shadow:none!important}
-  #receiptPrint th,#receiptPrint td,.panel.active th,.panel.active td{padding:7px 8px!important;border:1px solid #d4e3d9!important;overflow-wrap:anywhere}
-  #receiptPrint th,.panel.active th{background:#e7f4eb!important;color:#14563b!important;font-weight:700}
-  #receiptPrint tr,.panel.active tr{break-inside:avoid;page-break-inside:avoid}
-  #receiptPrint .tablewrap,.panel.active .tablewrap{overflow:visible!important;border:1px solid #d4e3d9!important;box-shadow:none!important}
-  #reportResult,#yearResult,#memberList,#fundSummary,#accountSummary{break-inside:auto}
-  .card,.section,.tablewrap{box-shadow:none!important;border-color:#d7e4dc!important}
-  .print-brand{break-inside:avoid}
-  button,input,select,textarea{display:none!important}
+@media(max-width:480px){
+.grid{gap:7px}.card{padding:11px}.stat{gap:7px;min-height:83px}.stat .ico{width:32px;height:32px}.stat strong{font-size:19px}.formgrid{grid-template-columns:1fr}.pagehead h2{font-size:18px}
 }
 
-
-/* Dashboard UI refresh: prominent readable amounts and responsive summary tiles */
-#summary{grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:8px 0 22px}
-#summary .summary-card{min-height:150px;padding:17px 18px 14px;border:1px solid #dce9e1;border-radius:20px;background:#fff;box-shadow:0 7px 22px rgba(15,67,45,.07);display:flex;flex-direction:column;justify-content:space-between;gap:10px;position:relative;isolation:isolate}
-#summary .summary-card:after{width:110px;height:110px;right:-40px;top:auto;bottom:-55px;background:rgba(255,255,255,.20);z-index:-1}
-#summary .summary-top{display:flex;align-items:center;gap:9px;min-width:0}
-#summary .summary-icon{width:35px;height:35px;flex:0 0 35px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.22);font-size:19px;font-weight:800}
-#summary .summary-top .k{font-size:14px;font-weight:700;line-height:1.35;flex:1}
-#summary .summary-arrow{font-size:16px;opacity:.75}
-#summary .summary-card .v{font-size:clamp(27px,3vw,36px);font-weight:800;line-height:1.2;letter-spacing:-.5px;margin:3px 0;white-space:normal;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
-#summary .tap-hint{font-size:12px;font-weight:600;opacity:.82;margin:0;display:flex;justify-content:space-between;align-items:center}
-#summary .summary-card:nth-child(1){background:linear-gradient(135deg,#087b55,#16a875);color:#fff;border-color:#0b8a60}
-#summary .summary-card:nth-child(2){background:linear-gradient(135deg,#a83a35,#d85c51);color:#fff;border-color:#bd4941}
-#summary .summary-card:nth-child(3){background:linear-gradient(135deg,#155b9a,#2586c5);color:#fff;border-color:#246eaa}
-#summary .summary-card:nth-child(4){background:linear-gradient(135deg,#4b568d,#747fc0);color:#fff;border-color:#606ca7}
-#summary .summary-card:nth-child(5){background:linear-gradient(135deg,#a36512,#d99a28);color:#fff;border-color:#b97b1d}
-#summary .summary-card:nth-child(6){background:linear-gradient(135deg,#087b70,#18a99a);color:#fff;border-color:#0d9387}
-#summary .summary-card:nth-child(7){background:linear-gradient(135deg,#59428d,#8768bd);color:#fff;border-color:#6e55a5}
-#summary .summary-card .k,#summary .summary-card .v,#summary .summary-card .tap-hint{color:#fff}
-#summary .summary-card:hover{transform:translateY(-3px);box-shadow:0 13px 28px rgba(15,67,45,.17)}
-@media(max-width:850px){#summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}#summary .summary-card{min-height:132px;padding:14px;border-radius:17px}#summary .summary-card .v{font-size:clamp(25px,5.2vw,32px)}}
-@media(max-width:380px){#summary{gap:8px}#summary .summary-card{min-height:126px;padding:11px 10px}#summary .summary-icon{width:30px;height:30px;flex-basis:30px;border-radius:10px;font-size:16px}#summary .summary-top .k{font-size:12px}#summary .summary-card .v{font-size:23px}#summary .tap-hint{font-size:10px}}
-
-
-/* Mobile-first mosque dashboard visual refresh */
-:root{--green:#087342;--green2:#08a65a;--green3:#064b31;--bg:#f4faf7}
-body{background:linear-gradient(180deg,#eaf8f0 0,#f8fbf9 300px,#f2f8fb 100%)}
-header{min-height:112px;padding:23px 22px 20px 118px;background:radial-gradient(circle at 8% 100%,#d9f6df 0 5%,transparent 5.5%),linear-gradient(135deg,#00643d,#078447 62%,#05a75d);position:relative;overflow:hidden;border-radius:0 0 28px 28px}
-header:before{content:'🕌';position:absolute;left:20px;bottom:-8px;font-size:82px;filter:drop-shadow(0 4px 4px #003b2b55);opacity:.95}
-header:after{content:'';position:absolute;right:-55px;top:-80px;width:260px;height:180px;border:1px solid #ffffff25;border-radius:50%;box-shadow:0 0 0 22px #ffffff0c,0 0 0 48px #ffffff09;pointer-events:none}
-header h1{font-size:clamp(24px,4vw,34px);font-weight:800;letter-spacing:.2px}header p{font-size:14px;font-weight:600}
-.wrap{max-width:1180px;padding:14px 16px 95px}
-#home .home-meta{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 13px;padding:10px 14px;border:1px solid #bfe9d0;border-radius:30px;background:linear-gradient(90deg,#e0f8e8,#f0fbf5);color:#075b37;font-weight:700}
-#summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:18px}
-#summary .summary-card{min-height:135px;padding:14px 12px;border-radius:24px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 4px 10px #164c3218}
-#summary .summary-card:after{display:none}
-#summary .summary-income{background:linear-gradient(145deg,#e0ffe7,#c8f5d4);border-color:#b4ebc4;color:#075b2f}
-#summary .summary-expense{background:linear-gradient(145deg,#ffe7e7,#ffd9d9);border-color:#ffc5c5;color:#b31515}
-#summary .summary-cash{background:linear-gradient(145deg,#e7f4ff,#d8ebff);border-color:#b9d9ff;color:#09295d}
-#summary .summary-top{display:flex;flex-direction:column;align-items:center;gap:3px}
-#summary .summary-icon{font-size:30px;line-height:1.2}
-#summary .summary-card .k{font-size:16px;color:inherit;font-weight:800}
-#summary .summary-card .v{font-size:clamp(19px,2.7vw,28px);color:inherit;font-weight:900;margin-top:2px}
-#summary .tap-hint{display:none}
-#home .section h2{background:linear-gradient(100deg,#006d3e,#079c56);color:#fff;padding:12px 16px;border-radius:18px 18px 0 0;margin:0;font-size:19px}
-#home .home-funds-wrap{border:1px solid #dcefe4;border-radius:20px;background:#fff;overflow:hidden;box-shadow:0 5px 15px #164c3210;margin-bottom:18px}
-#homeFundGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:12px}
-#homeFundGrid .fund-card{min-height:112px;border-radius:20px;padding:12px;text-align:left;display:flex;flex-direction:column;justify-content:center;box-shadow:0 3px 8px #183f2b16}
-#homeFundGrid .fund-card:nth-child(6n+1){background:linear-gradient(145deg,#e3ffeb,#d1f7dc);border-color:#bceaca}
-#homeFundGrid .fund-card:nth-child(6n+2){background:linear-gradient(145deg,#ffe5ef,#fbd9e8);border-color:#f6c6dc}
-#homeFundGrid .fund-card:nth-child(6n+3){background:linear-gradient(145deg,#fff3dc,#ffebc8);border-color:#f6ddb0}
-#homeFundGrid .fund-card:nth-child(6n+4){background:linear-gradient(145deg,#e5f3ff,#d7eaff);border-color:#bfdbff}
-#homeFundGrid .fund-card:nth-child(6n+5){background:linear-gradient(145deg,#f5eaff,#eee0ff);border-color:#dfcaff}
-#homeFundGrid .fund-card:nth-child(6n){background:linear-gradient(145deg,#e5ffea,#d4f6dc);border-color:#c0eac9}
-#homeFundGrid .fund-card .k{font-size:15px;font-weight:800;color:#143c2b}
-#homeFundGrid .fund-card .v{font-size:19px;font-weight:900;color:#075b37;margin:3px 0}
-#homeFundGrid .fund-card .hint{font-size:11px;line-height:1.35}
-#home .recent-wrap{border:1px solid #d8ebdf;border-radius:20px;overflow:hidden;background:white;box-shadow:0 5px 15px #164c3210}
-#home .recent-wrap .tablewrap{border:0;border-radius:0;box-shadow:none}
-#home .recent-wrap table{min-width:560px}
-#home .recent-wrap th{background:#d9f5df;color:#123c29}
-#home .backup-shortcut{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px;padding:12px 14px;border-radius:20px;background:linear-gradient(110deg,#d8f7df,#c8f0d1);border:1px solid #b8e6c4}
-#home .backup-shortcut .status{margin:0;background:transparent;border:0;padding:0;font-weight:700}
-#home .backup-shortcut .btn{white-space:nowrap;border-radius:28px;padding:12px 18px}
-.mobile-bottom-nav{display:none}
-@media(max-width:600px){
- header{min-height:100px;padding:18px 14px 16px 94px;border-radius:0 0 22px 22px}header:before{left:13px;font-size:67px}header h1{font-size:24px}header p{font-size:12px}
- .wrap{padding:10px 10px 100px}.tabs{top:0;position:relative;background:transparent;backdrop-filter:none;overflow-x:auto}
- #summary{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:14px}
- #summary .summary-card{min-height:108px;padding:9px 5px;border-radius:17px}
- #summary .summary-icon{font-size:23px}#summary .summary-card .k{font-size:12px}#summary .summary-card .v{font-size:15px;line-height:1.25;overflow-wrap:anywhere}
- #home .home-meta{font-size:12px;padding:9px 11px;border-radius:18px}
- #homeFundGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:9px}
- #homeFundGrid .fund-card{min-height:105px;padding:10px;border-radius:16px}
- #homeFundGrid .fund-card .k{font-size:13px}#homeFundGrid .fund-card .v{font-size:17px}
- #home .section h2{font-size:16px;padding:11px 13px}
- #home .backup-shortcut{align-items:flex-start;flex-direction:column}
- #home .backup-shortcut .btn{width:100%}
- .mobile-bottom-nav{display:flex;position:fixed;z-index:50;bottom:0;left:0;right:0;padding:7px max(8px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom));background:#ffffffed;backdrop-filter:blur(14px);border:1px solid #dce9e1;border-radius:22px 22px 0 0;box-shadow:0 -5px 22px #17452b18;justify-content:space-around;gap:4px}
- .mobile-bottom-nav button{border:0;background:transparent;color:#17231e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-weight:700;font-size:11px;min-width:0;flex:1;padding:6px 2px;border-radius:18px}
- .mobile-bottom-nav button span:first-child{font-size:21px;line-height:1.2}
- .mobile-bottom-nav button.active{background:linear-gradient(135deg,#009b55,#006b3b);color:#fff}
- body{padding-bottom:env(safe-area-inset-bottom)}
+.mobile-header,.bottom-nav{display:none}
+@media(max-width:800px){
+body{background:#eef5f3}main{padding:12px 16px 105px}.sidebar,.topbar{display:none}
+.notice{border-radius:16px;padding:13px 16px;font-size:13px}
+.mobile-header{display:flex;align-items:center;gap:12px;padding:8px 0 16px;position:sticky;top:0;z-index:7;background:#eef5f3}
+.brand-mark{width:58px;height:58px;border-radius:20px;background:#dcefe7;color:#087657;display:grid;place-items:center;font-size:30px}
+.brand-title{display:flex;flex-direction:column;min-width:0;flex:1}.brand-title strong{font-size:24px;line-height:1.15}.brand-title small{font-size:16px;color:#748094}
+.round-action{width:48px;height:48px;border-radius:50%;padding:0;background:#dcefe7;color:#087657;font-size:26px}.bell-action{background:transparent}
+#dashboard .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#dashboard .stat{min-height:112px;border-radius:20px;padding:17px;display:block}
+#dashboard .stat .ico{display:none}#dashboard .stat small{font-size:15px}#dashboard .stat strong{font-size:27px;margin-top:9px}
+#dashboard .stat:nth-child(4){grid-column:1/-1;min-height:145px;border-radius:22px;padding:23px}
+#dashboard .stat:nth-child(4) small{font-size:17px}#dashboard .stat:nth-child(4) strong{font-size:38px}
+.card{border-radius:20px;padding:17px;margin-bottom:14px}.jumma{border:1px solid #ffda70}.jumma h3{font-size:20px}
+.jummaGrid div{padding:14px;border-radius:16px}.jummaGrid small{font-size:14px}.jummaGrid b{font-size:24px}
+.bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;bottom:0;left:0;right:0;z-index:20;background:#fff;border-top:1px solid #dce4e8;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}
+.bottom-nav button{background:transparent;color:#68788c;border-radius:18px;padding:5px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px}
+.bottom-nav button span{width:64px;height:42px;border-radius:24px;display:grid;place-items:center;font-size:27px}.bottom-nav button small{font-size:13px}
+.bottom-nav button.active{color:#086b50;font-weight:700}.bottom-nav button.active span{background:#dcefe7}
+.more-list{background:#fff;border:1px solid #dce4e8;border-radius:24px;overflow:hidden}
+.more-list button{width:100%;display:flex;align-items:center;gap:16px;background:#fff;color:#202b3a;border-radius:0;border-bottom:1px solid #edf0f2;padding:17px 16px;text-align:left;font-size:19px}
+.more-list button:last-child{border-bottom:0}.more-icon{width:54px;height:54px;flex:none;border-radius:17px;background:#e3f1e9;color:#087657;display:grid;place-items:center;font-size:26px}
+.more-list b{flex:1;font-size:19px}.more-list .chev{color:#9aa8b7;font-size:30px;font-weight:400}
+.more-list .logout-row,.more-list .logout-row .more-icon{color:#bd3333}.more-list .logout-row .more-icon{background:#fde6e6}
+#members .pagehead,#transactions .pagehead{display:block}#members .card,#transactions .card{padding:13px}
+input,select,textarea{font-size:15px;padding:12px}.formgrid{grid-template-columns:1fr}table{font-size:12px}
 }
-@media(max-width:370px){#summary .summary-card .v{font-size:13px}#homeFundGrid{gap:6px;padding:7px}}
+@media(max-width:420px){main{padding-left:12px;padding-right:12px}.brand-title strong{font-size:21px}.round-action{width:42px;height:42px}#dashboard .stat{padding:13px}#dashboard .stat strong{font-size:23px}.more-list button{padding:14px 12px;gap:12px}.more-icon{width:48px;height:48px}.more-list b{font-size:17px}}
 
-
-/* নির্বাচন করে একই A4 পাতায় সর্বোচ্চ ৩টি রসিদ */
-.receipt-picker{position:fixed;inset:0;z-index:12000;background:#092c20a8;display:none;align-items:center;justify-content:center;padding:14px}
-.receipt-picker.open{display:flex}
-.receipt-picker-box{width:min(100%,760px);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:18px;box-shadow:0 20px 60px #001b1080}
-.receipt-picker-head{display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:-18px;background:#fff;padding:4px 0 12px;border-bottom:1px solid #dce8e1;z-index:2}
-.receipt-picker-list{display:grid;gap:8px;margin:14px 0}
-.receipt-choice{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #dce8e1;border-radius:12px;background:#fbfefc}
-.receipt-choice input{width:19px;height:19px;flex:0 0 auto}
-.receipt-choice span{flex:1;min-width:0}
-.receipt-choice small{display:block;color:#61766d}
-.receipt-picker-actions{display:flex;gap:8px;flex-wrap:wrap;position:sticky;bottom:-18px;background:#fff;padding:12px 0 4px}
-@media print{
-  #receiptPrint .multi-sheet{width:100%!important;height:273mm!important;max-width:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;display:flex!important;flex-direction:column!important;gap:3mm!important;box-sizing:border-box!important}
-  #receiptPrint .multi-receipt{flex:1 1 0!important;min-height:0!important;overflow:hidden!important;box-sizing:border-box!important;border:1.2px solid #16805c!important;border-radius:6px!important;padding:5mm 6mm!important;display:flex!important;flex-direction:column!important;justify-content:flex-start!important;break-inside:avoid!important;page-break-inside:avoid!important}
-  #receiptPrint .multi-receipt .print-brand{padding:2mm 1mm!important;gap:3mm!important}
-  #receiptPrint .multi-receipt .print-brand .mark{width:10mm!important;height:10mm!important;font-size:17pt!important}
-  #receiptPrint .multi-receipt .print-brand h1{font-size:15pt!important}
-  #receiptPrint .multi-receipt .print-brand p{font-size:8pt!important}
-  #receiptPrint .multi-receipt .print-title{font-size:12pt!important;margin:2mm 0!important}
-  #receiptPrint .multi-receipt .print-meta{font-size:8pt!important;padding:1.5mm 2mm!important;margin:1.5mm 0!important}
-  #receiptPrint .multi-receipt p{font-size:9pt!important;margin:1.5mm 0!important}
-  #receiptPrint .multi-receipt .print-total{margin:2mm 0!important;padding:2mm!important}
-  #receiptPrint .multi-receipt .print-total .amount{font-size:16pt!important}
-  #receiptPrint .multi-receipt .print-note{font-size:8pt!important;margin-top:1mm!important;padding:2mm!important}
-  #receiptPrint .multi-receipt .print-signatures{margin-top:auto!important;padding-top:7mm!important;gap:8mm!important;font-size:8pt!important}
-  #receiptPrint .multi-receipt .print-signatures span{min-width:35mm!important;padding:1.5mm 2mm 0!important}
-  #receiptPrint .multi-receipt .receipt-footer{font-size:7pt!important;margin:1mm 0 0!important}
-}
-
-
-/* Green-white Islamic receipt design + stylish Bengali typography */
-#receiptPrint,.premium-receipt{font-family:"Anek Bangla","Hind Siliguri","Noto Sans Bengali",sans-serif!important}
-#receiptPrint .multi-sheet{background:#fff}
-#receiptPrint .premium-receipt{position:relative;color:#183c2c;background:linear-gradient(145deg,#fff 0%,#fbfffc 100%);border:1.5px solid #16805c;border-radius:12px;overflow:hidden;padding:4mm 5mm;box-shadow:inset 0 0 0 1px #c9e6d2}
-#receiptPrint .premium-receipt:before,#receiptPrint .premium-receipt:after{content:"❧";position:absolute;color:#239466;font-size:23pt;line-height:1;top:2mm}
-#receiptPrint .premium-receipt:before{left:3mm}#receiptPrint .premium-receipt:after{right:3mm;transform:scaleX(-1)}
-#receiptPrint .receipt-topline{display:flex;justify-content:center;align-items:center;gap:10px;color:#17724f;font-size:9pt;font-weight:700;letter-spacing:.5px;border-bottom:1px solid #d4eadb;padding-bottom:1mm}
-#receiptPrint .receipt-heading{display:grid;grid-template-columns:17mm 1fr 27mm;align-items:center;gap:3mm;padding:2mm 0}
-#receiptPrint .receipt-mosque{font-size:25pt;text-align:center;filter:saturate(.85)}
-#receiptPrint .receipt-heading-text{text-align:center;min-width:0}
-#receiptPrint .receipt-kicker{font-size:8pt;color:#4c8067;font-weight:600}
-#receiptPrint .receipt-heading h1{font-family:"Hind Siliguri","Anek Bangla",sans-serif;font-size:16pt;line-height:1.15;margin:0;color:#07543a;font-weight:700}
-#receiptPrint .receipt-heading p{font-size:7.5pt;margin:1mm 0 0;color:#557466;line-height:1.2}
-#receiptPrint .receipt-no{border:1px solid #16805c;border-radius:7px;padding:1.5mm;text-align:center;font-size:7pt;color:#176344;background:#f0faf3}
-#receiptPrint .receipt-no strong{display:block;font-size:10pt;color:#064d34}
-#receiptPrint .receipt-titlebar{display:flex;align-items:center;justify-content:center;gap:3mm;background:#0e6848;color:white;border-radius:20px;padding:1mm 3mm;margin:1mm 0 2mm}
-#receiptPrint .receipt-titlebar h2{font-family:"Hind Siliguri",sans-serif;font-size:12pt;margin:0;color:#fff;font-weight:700}
-#receiptPrint .receipt-titlebar span{color:#d8f2df}
-#receiptPrint .receipt-fields{display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:2mm}
-#receiptPrint .receipt-field{border-bottom:1px dashed #9bbda7;padding:1mm 1.5mm;min-width:0}
-#receiptPrint .receipt-field span{display:block;font-size:7pt;color:#62816f}
-#receiptPrint .receipt-field b{display:block;font-size:9pt;color:#203d2e;overflow-wrap:anywhere}
-#receiptPrint .receipt-amount{margin:2mm auto;padding:2mm 4mm;text-align:center;border:1.5px solid #8fc69f;border-radius:8px;background:linear-gradient(135deg,#f2fae9,#fff);max-width:78%}
-#receiptPrint .receipt-amount .amount-label{font-size:8pt;color:#326a4b;font-weight:700}
-#receiptPrint .receipt-amount strong{display:block;font-family:"Anek Bangla",sans-serif;font-size:19pt;line-height:1.2;color:#07543a;font-weight:800}
-#receiptPrint .receipt-amount small{display:block;font-size:8pt;color:#3c674d}
-#receiptPrint .receipt-note{font-size:7.5pt;padding:1mm 2mm;background:#f7fbf8;border:1px solid #e0eee4;border-radius:5px}
-#receiptPrint .receipt-dua{margin:1.5mm auto 0;text-align:center;font-size:8pt;line-height:1.3;color:#3d7454;background:#eff9f1;border:1px solid #cce7d2;border-radius:6px;padding:1.5mm}
-#receiptPrint .premium-receipt .print-signatures{display:flex;justify-content:space-between;gap:8mm;margin-top:auto;padding-top:5mm;text-align:center;font-size:7.5pt;color:#315b43}
-#receiptPrint .premium-receipt .print-signatures span{min-width:32mm;border-top:1px solid #7fa58c;padding:1mm 2mm 0}
-#receiptPrint .receipt-bottomline{text-align:center;border-top:1px solid #d7eadd;margin-top:1mm;padding-top:1mm;font-size:6.5pt;color:#688775}
-@media print{
- @page{size:A4 portrait;margin:9mm}
- #receiptPrint .multi-sheet{height:279mm!important;gap:3mm!important}
- #receiptPrint .premium-receipt{border-radius:2mm!important;padding:3mm 4mm!important;break-inside:avoid!important;page-break-inside:avoid!important}
- #receiptPrint .receipt-heading{grid-template-columns:16mm 1fr 25mm!important}
- #receiptPrint .receipt-heading h1{font-size:15pt!important}
- #receiptPrint .receipt-amount strong{font-size:18pt!important}
- #receiptPrint .premium-receipt .print-signatures{padding-top:4mm!important}
- *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
-}
-
-</style></head>
-<body><header><h1 id="appTitle">🕌 মসজিদ পূর্ণাঙ্গ হিসাব</h1><p>দান • হাদিয়া • আয়-ব্যয় • তহবিল • মাসিক রিপোর্ট</p></header>
-<div class="wrap"><div class="tabs no-print" id="tabs"><button class="active" data-tab="home">ড্যাশবোর্ড</button><button data-tab="transactions">আয়-ব্যয় / দান</button><button data-tab="receipts">🧾 রসিদ তালিকা</button><button data-tab="hadia">মাসিক হাদিয়া</button><button data-tab="funds">তহবিল</button><button data-tab="reports">রিপোর্ট</button><button data-tab="backup">ব্যাকআপ</button><button data-tab="settings">সেটিংস</button></div>
-<section class="panel active" id="home"><div class="home-meta"><span>🕌 <b id="homeMosqueName">মসজিদের হিসাব</b></span><span>▦ আজ: <b id="homeToday"></b></span></div><div class="grid" id="summary"></div><div class="section home-funds-wrap"><h2>▦　তহবিলসমূহ <span style="float:right;font-size:13px">সব দেখুন →</span></h2><div id="homeFundGrid"></div></div><div class="section recent-wrap"><h2>◷　সাম্প্রতিক লেনদেন <span style="float:right;font-size:13px">আরও দেখুন →</span></h2><div id="recent" class="tablewrap"></div></div><div class="backup-shortcut"><div><div style="font-weight:800">☁ ব্যাকআপের অবস্থা: <span id="homeOnlineLabel">যাচাই হচ্ছে…</span></div><div class="hint" id="homeBackupHint">নিয়মিত ব্যাকআপ রাখুন</div></div><button class="btn" type="button" onclick="go('backup')">☁ ব্যাকআপ নিন</button></div><div class="actions" style="margin-top:12px"><button class="btn" onclick="go('transactions');document.getElementById('type').value='income';document.getElementById('category').value='দান';">＋ দান জমা</button><button class="btn secondary" onclick="go('transactions');document.getElementById('type').value='expense'">− ব্যয় লিখুন</button><button class="btn secondary" onclick="go('hadia')">মাসিক হাদিয়া</button></div></section>
-<section class="panel" id="transactions"><div class="card section"><h2>নতুন আয় / ব্যয় / দান</h2><form id="txForm"><div class="row"><div class="field"><label>ধরন</label><select id="type"><option value="income">আয়</option><option value="expense">ব্যয়</option></select></div><div class="field"><label>তারিখ</label><input type="date" id="date" required></div><div class="field"><label>টাকার পরিমাণ (৳)</label><input type="number" id="amount" min="1" step="0.01" required placeholder="০"></div></div><div class="row" style="margin-top:10px"><div class="field"><label>খাত</label><select id="category"><option>দান</option><option>মাসিক হাদিয়া</option><option>নির্মাণ তহবিল</option><option>বিশেষ তহবিল</option><option>ইমাম বেতন</option><option>মুয়াজ্জিন বেতন</option><option>অন্যান্য বেতন</option><option>বিদ্যুৎ/পানি বিল</option><option>মেরামত</option><option>পরিচ্ছন্নতা</option><option>অন্যান্য</option></select></div><div class="field"><label>হিসাবের ধরন</label><input value="নগদ (সকল লেনদেন)" readonly><input type="hidden" id="account" value="cash"></div><div class="field"><label>রসিদ/ভাউচার নং (ঐচ্ছিক)</label><input id="refno" placeholder="স্বয়ংক্রিয় হবে"></div></div><div class="row" style="margin-top:10px"><div class="field"><label>দাতা/গ্রহীতা/বিবরণ</label><input id="person" placeholder="নাম বা বিবরণ"></div><div class="field"><label>নোট (ঐচ্ছিক)</label><input id="note" placeholder="অতিরিক্ত তথ্য"></div></div><div class="row" style="margin-top:12px"><button class="btn" type="submit">লেনদেন সংরক্ষণ</button><button class="btn secondary" type="button" id="clearTx">ফর্ম পরিষ্কার</button></div></form></div><div class="section"><h2>লেনদেনের তালিকা</h2><div class="row no-print"><div class="field"><label>মাস</label><input type="month" id="filterMonth"></div><div class="field"><label>ধরন</label><select id="filterType"><option value="all">সব</option><option value="income">আয়</option><option value="expense">ব্যয়</option></select></div><button class="btn secondary" id="clearFilters">ফিল্টার মুছুন</button></div><div id="txList" class="tablewrap"></div></div></section>
-<section class="panel" id="receipts"><div class="card section"><h2>🧾 রসিদ তালিকা</h2><p class="hint">সব আয়, দান ও ব্যয়ের রসিদ/ভাউচার এখানে দেখা যাবে। নাম বা রসিদ নম্বর দিয়ে খুঁজুন; ধরন অনুযায়ী আলাদা করুন।</p><div class="row no-print"><div class="field"><label>দাতা / গ্রহীতার নাম</label><input id="receiptSearchName" type="search" placeholder="নাম লিখুন..."></div><div class="field"><label>রসিদ / ভাউচার নম্বর</label><input id="receiptSearchNo" type="search" placeholder="নম্বর লিখুন..."></div><div class="field"><label>ধরন</label><select id="receiptFilterType"><option value="all">সব রসিদ</option><option value="income">শুধু আয় / দান</option><option value="expense">শুধু ব্যয় / ভাউচার</option></select></div><div class="field"><label>মাস</label><input id="receiptFilterMonth" type="month"></div></div><div class="actions no-print" style="margin:10px 0"><button class="btn secondary" type="button" id="receiptFilterClear">ফিল্টার মুছুন</button><button class="btn" type="button" id="receiptPrintSelected">নির্বাচিত ১–৩টি রসিদ প্রিন্ট</button><span class="hint" id="receiptSelectedCount">০ / ৩ নির্বাচিত</span></div><div id="receiptListTable" class="tablewrap"></div></div></section><section class="panel" id="hadia"><div class="card section"><h2>হাদিয়াদাতার তালিকায় যোগ করুন</h2><form id="memberForm"><div class="row"><div class="field"><label>নাম</label><input id="memberName" required></div><div class="field"><label>মোবাইল (ঐচ্ছিক)</label><input id="memberPhone" inputmode="tel"></div><div class="field"><label>মাসিক নির্ধারিত হাদিয়া (৳)</label><input type="number" id="memberDue" min="0" required></div><div class="field"><label>শুরু মাস</label><input type="month" id="memberStart" required></div></div><div class="row" style="margin-top:10px"><button class="btn">নাম সংরক্ষণ</button></div></form></div><div class="card section no-print"><h2>ডিফল্ট হাদিয়াদাতার তালিকা</h2><p class="hint">প্রতি লাইনে লিখুন: নাম | মাসিক হাদিয়া | মোবাইল (ঐচ্ছিক) | শুরু মাস। উদাহরণ: আব্দুর রহিম | ৫০০ | 01XXXXXXXXX | 2024-10। এই তালিকা সম্পাদনা করলে পুরোনো হিসাব বদলাবে না।</p><div class="field"><label>ডিফল্ট তালিকা</label><textarea id="defaultMembersText" rows="5" placeholder="আব্দুর রহিম | ৫০০ | | 2024-10&#10;মোঃ করিম | ১০০০ | | 2024-10"></textarea></div><div class="actions" style="margin-top:10px"><button class="btn" type="button" id="saveDefaultMembers">ডিফল্ট তালিকা সংরক্ষণ</button><button class="btn secondary" type="button" id="addDefaultMembers">ডিফল্ট তালিকা থেকে সদস্য যোগ</button></div><p class="hint">কোডে দেওয়া ৭১ জনের তালিকা এখানে দেখা যাবে। সফিকুল বিডিয়ারের মাসিক হাদিয়া আপনার দেওয়া তালিকায় উল্লেখ নেই, তাই আপাতত ০ রাখা হয়েছে—সঠিক পরিমাণ বসিয়ে নিন।</p></div><div class="card section"><h2>মাসিক হাদিয়া আদায়</h2><div class="row"><div class="field"><label>হাদিয়াদাতা</label><select id="payMember"></select></div><div class="field"><label>যে মাসের হাদিয়া</label><input type="month" id="payMonth"></div><div class="field"><label>জমার পরিমাণ (৳)</label><input type="number" id="payAmount" min="1"></div><div class="field"><label>জমার তারিখ</label><input type="date" id="payDate"></div></div><div class="row" style="margin-top:10px"><button class="btn" id="payBtn" type="button">হাদিয়া জমা করুন</button><span class="hint">জমা হলে আয়ের খাতেও লেনদেন তৈরি হবে।</span></div></div><div class="section"><h2>হাদিয়াদাতা ও বকেয়া</h2><div class="card no-print" style="margin-bottom:12px"><h3 style="margin-top:0">হাদিয়াদাতার তালিকা</h3><div class="row"><div class="field"><label>হাদিয়াদাতার নাম নির্বাচন করুন</label><select id="hadiaSearchMember"><option value="">সব হাদিয়াদাতা দেখুন</option></select></div><div class="field"><label>হিসাব যে মাস পর্যন্ত</label><input type="month" id="searchDueThrough"></div></div><div class="actions" style="margin-top:10px"><button class="btn" type="button" id="searchHadiaMemberBtn">নির্বাচিত নামের হিসাব দেখুন</button><button class="btn secondary" type="button" id="showAllHadiaMembersBtn">সব হাদিয়াদাতা দেখুন</button></div><div class="hint">নাম লেখার দরকার নেই। তালিকা থেকে হাদিয়াদাতার নাম নির্বাচন করে “নির্বাচিত নামের হিসাব দেখুন” চাপুন।</div><div id="hadiaSearchResult" style="margin-top:12px"></div></div><div class="row no-print"><div class="field"><label>যে মাস পর্যন্ত হিসাব</label><input type="month" id="dueThrough"></div></div><div id="memberList" class="tablewrap"></div><div class="hint">বকেয়া = শুরু মাস থেকে নির্বাচিত মাস পর্যন্ত নির্ধারিত মোট হাদিয়া − ঐ সময়ে রেকর্ড করা জমা। কোনো ব্যক্তির হাদিয়া বন্ধ থাকলে সদস্যের তালিকা থেকে সরানোর আগে রেকর্ড রপ্তানি করুন।</div></div></section>
-<section class="panel" id="funds"><div class="card section"><h2>তহবিলের হিসাব</h2><p class="hint">নির্মাণ ও বিশেষ তহবিলের জন্য লেনদেনের খাত নির্বাচন করুন। নিচে খাতভিত্তিক মোট আয়-ব্যয় দেখানো হবে।</p><div id="fundSummary" class="grid"></div></div><div class="section"><h2>নগদ ও ব্যাংক</h2><div id="accountSummary" class="grid"></div><div class="card section"><h3 style="margin-top:0">🔒 ব্যাংক ব্যালেন্স (ফ্রিজ)</h3><p class="hint">ব্যাংকের টাকা সাধারণ আয়, ব্যয়, দান বা হাদিয়া লেনদেনে পরিবর্তন হবে না। শুধু ৪ সংখ্যার ব্যাংক PIN দিয়ে আলাদা করে ব্যালেন্স সংশোধন করা যাবে।</p><div class="actions"><button class="btn" type="button" id="manageBankBalance">PIN দিয়ে ব্যাংক ব্যালেন্স পরিবর্তন</button><button class="btn secondary" type="button" id="changeBankPin">ব্যাংক PIN পরিবর্তন</button></div><div id="bankHistory" style="margin-top:12px"></div></div></div></section>
-<section class="panel" id="reports"><div class="card section"><h2>মাসভিত্তিক রিপোর্ট</h2><div class="row no-print"><div class="field"><label>মাস নির্বাচন</label><input type="month" id="reportMonth"></div><button class="btn" id="runReport">রিপোর্ট দেখুন</button><button class="btn secondary" onclick="go('reports');window.print()">প্রিন্ট / PDF</button></div><div id="reportResult"></div></div><div class="card section"><h2>বার্ষিক সারসংক্ষেপ</h2><div class="row no-print"><div class="field"><label>বছর</label><select id="reportYear"></select></div><button class="btn" id="runYear">বার্ষিক রিপোর্ট</button><button class="btn secondary" id="csvBtn">CSV ডাউনলোড</button></div><div id="yearResult"></div></div></section>
-<section class="panel" id="backup"><div class="card section"><h2>ব্যাকআপ ও পুনরুদ্ধার</h2><div class="status" id="backupStatus">লোকাল ব্যাকআপ চালু আছে কি না যাচাই করা হচ্ছে…</div><div class="status warn" id="deviceNetworkStatus" role="status">ডিভাইসের নেটওয়ার্ক অবস্থা যাচাই করা হচ্ছে…</div><div class="actions"><button class="btn" id="exportBtn">JSON ব্যাকআপ ডাউনলোড</button><label class="btn secondary" for="importFile">ব্যাকআপ ফাইল থেকে ফিরিয়ে আনুন</label><input id="importFile" class="hide" type="file" accept=".json,application/json"><button class="btn secondary" id="printReceiptList">রসিদ তালিকা প্রিন্ট</button></div><p class="hint">প্রতিটি ডেটা পরিবর্তনের পর ব্রাউজারের IndexedDB-তে স্বয়ংক্রিয় লোকাল ব্যাকআপ রাখার চেষ্টা করা হয়। ফোন হারানো বা ব্রাউজারের ডেটা মুছে যাওয়ার ঝুঁকি থেকে বাঁচতে JSON ফাইল ডাউনলোড করে অন্য ডিভাইস/ক্লাউডে কপি রাখুন।</p></div><div class="card section"><h2>Google Sheets ক্লাউড ব্যাকআপ</h2><div id="cloudStatus" class="status warn">Google Sheets সংযোগ সেটআপ করুন।</div><div class="row"><div class="field"><label>Apps Script Web App URL</label><input id="cloudUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" autocomplete="url"></div><div class="field"><label>গোপন ব্যাকআপ কী</label><input id="cloudKey" type="password" placeholder="Apps Script-এর সঙ্গে একই কী" autocomplete="off"></div></div><div class="row" style="margin-top:10px"><button class="btn" id="saveCloudConfig">সংযোগ সেটিংস সংরক্ষণ</button><button class="btn secondary" id="cloudBackupNow">এখনই ক্লাউড ব্যাকআপ</button><button class="btn secondary" id="cloudRestore">সর্বশেষ ব্যাকআপ রিস্টোর</button></div><div class="row" style="margin-top:10px;align-items:center"><label style="display:flex;gap:8px;align-items:center;font-size:13px"><input id="cloudAuto" type="checkbox" style="width:auto"> স্বয়ংক্রিয় ব্যাকআপ ব্যবস্থা</label></div><p class="hint">প্রথমে ZIP-এর <b>Google-Apps-Script.gs</b> ফাইলটি Google Apps Script-এ বসিয়ে Web App হিসেবে Deploy করুন। তারপর Web App URL এবং একই গোপন কী এখানে দিন। স্বয়ংক্রিয় ব্যাকআপ চালু করলে প্রতিটি পরিবর্তনের কিছুক্ষণ পরে নতুন কপি পাঠানো হবে। ইন্টারনেট না থাকলে ক্লাউড ব্যাকআপ হবে না; JSON ফাইলও নিয়মিত ডাউনলোড করে রাখুন।</p><p class="hint">গোপন কী শক্তিশালী ও অনন্য রাখুন। ক্লাউডে সংরক্ষিত হিসাব আপনার Google Sheet-এ থাকবে; সেটির শেয়ারিং সীমিত রাখুন।</p></div><div class="card section"><h2>লোকাল ব্যাকআপ ইতিহাস</h2><div id="backupHistory"></div></div></section>
-<section class="panel" id="settings"><div class="card section"><h2>মসজিদের পরিচিতি</h2><div class="row"><div class="field"><label>মসজিদের নাম</label><input id="mosqueName" placeholder="যেমন: বায়তুল আমান জামে মসজিদ"></div><div class="field"><label>ঠিকানা</label><input id="mosqueAddress" placeholder="গ্রাম/এলাকা, উপজেলা, জেলা"></div><div class="field"><label>মোবাইল নম্বর</label><input id="mosquePhone" inputmode="tel"></div></div><div class="row" style="margin-top:10px"><div class="field"><label>রসিদ নম্বরের শুরু (prefix)</label><input id="receiptPrefix" placeholder="MZ"></div><div class="field"><label>প্রারম্ভিক নগদ ব্যালেন্স (৳)</label><input id="openingCash" type="number" min="0"></div></div><div class="row" style="margin-top:10px"><button class="btn" id="saveSettings">সেটিংস সংরক্ষণ</button></div><p class="hint">প্রারম্ভিক ব্যালেন্স একবার সঠিকভাবে দিন। পরে সেটি বদলালে মোট ব্যালেন্স বদলে যাবে।</p></div><div class="card section"><h2>ডেটা সুরক্ষা</h2><p class="hint">অ্যাপের ডেটা এই ব্রাউজারের স্টোরেজে থাকে। অ্যাপ আনইনস্টল, ব্রাউজার ডেটা ক্লিয়ার বা অন্য ফোনে গেলে ব্যাকআপ ফাইল ছাড়া তথ্য নাও ফিরতে পারে। সংবেদনশীল হিসাবের জন্য ডিভাইস লক ব্যবহার করুন এবং নিয়মিত অফলাইন কপি রাখুন।</p></div></section>
-<div id="summaryDetail" role="dialog" aria-modal="true" aria-labelledby="summaryDetailTitle"><div class="detail-box"><div class="detail-head"><h2 id="summaryDetailTitle">বিস্তারিত হিসাব</h2><button type="button" class="detail-close" id="closeSummaryDetail">বন্ধ করুন ✕</button></div><div class="detail-content" id="summaryDetailContent"></div></div></div><div id="receiptPrint" class="hide"></div><div id="receiptPicker" class="receipt-picker no-print" role="dialog" aria-modal="true" aria-label="রসিদ নির্বাচন"><div class="receipt-picker-box"><div class="receipt-picker-head"><h2 style="margin:0;color:#14583f">রসিদ নির্বাচন করে প্রিন্ট</h2><button type="button" class="btn secondary small" id="closeReceiptPicker">বন্ধ করুন ✕</button></div><p class="hint">একই A4 পাতায় প্রিন্ট করতে ১টি, ২টি অথবা সর্বোচ্চ ৩টি রসিদে টিক দিন।</p><div id="receiptPickerList" class="receipt-picker-list"></div><div class="receipt-picker-actions"><button type="button" class="btn" id="printSelectedReceipts">নির্বাচিত রসিদ প্রিন্ট</button><button type="button" class="btn secondary" id="clearReceiptSelection">নির্বাচন বাতিল</button><span class="hint" id="receiptSelectionCount" style="align-self:center">০ / ৩ নির্বাচিত</span></div></div></div><nav class="mobile-bottom-nav no-print" aria-label="প্রধান মেনু"><button class="active" data-mobile-tab="home"><span>⌂</span><span>হোম</span></button><button data-mobile-tab="reports"><span>▥</span><span>রিপোর্ট</span></button><button data-mobile-tab="print"><span>▣</span><span>প্রিন্ট</span></button><button data-mobile-tab="backup"><span>▤</span><span>ব্যাকআপ</span></button><button data-mobile-tab="settings"><span>⚙</span><span>সেটিংস</span></button></nav>
-<footer>মসজিদ পূর্ণাঙ্গ হিসাব • স্থানীয় ডেটা • সংস্করণ ১.০ প্রাথমিক</footer></div>
+@media print{.sidebar,.topbar,.notice,.no-print{display:none!important}main{margin:0;padding:0}.page{display:none!important}.page.active{display:block!important}.card{box-shadow:none;break-inside:avoid}}
+</style></head><body>
+<aside class="sidebar"><div class="logo">🕌 masjidhisab.com</div><div class="nav">
+<button class="active" data-page="dashboard">◷　ড্যাশবোর্ড</button>
+<button data-page="members">♟　সদস্য ও চাঁদা</button>
+<button data-page="transactions">☷　লেনদেন তালিকা</button>
+<button data-page="reports">▣　মাসিক রিপোর্ট</button>
+<button data-page="committee">♣　কমিটি ও কর্মী</button>
+<button data-page="install">⬇　অ্যাপ ইনস্টল করুন</button>
+<button data-page="about">ⓘ　আমার সম্পর্কে</button>
+<button data-page="settings">⚙　সেটিংস</button></div>
+<div class="account">অ্যাডমিন • এই ডিভাইস<br><span id="mosqueLabel">মসজিদ হিসাব</span><button onclick="alert('এই ডেমো সংস্করণে লগইন ব্যবস্থা সংযুক্ত নয়।')">⇥　লগআউট</button></div></aside>
+<main>
+<div class="mobile-header"><div class="brand-mark">🕌</div><div class="brand-title"><strong id="mobilePageTitle">ড্যাশবোর্ড</strong><small id="mobileMosqueName">মসজিদ</small></div><button class="round-action" onclick="renderAll()">⟳</button><button class="round-action bell-action" onclick="alert('নতুন কোনো নোটিফিকেশন নেই।')">♧</button></div>
+<div class="topbar"><div style="display:flex;align-items:center;gap:10px"><button id="menuToggle" class="menu-toggle" aria-label="মেনু খুলুন">⋮</button><strong id="pageTitle">ড্যাশবোর্ড</strong></div><button onclick="downloadBackup()">⬇ ব্যাকআপ</button></div>
+<div class="notice">ডেমো সংস্করণ: তথ্য এই ডিভাইসের ব্রাউজারে সংরক্ষিত থাকে। অনলাইন বহু-ডিভাইস ব্যবহার, প্রকৃত লগইন ও ক্লাউড ব্যাকআপের জন্য সার্ভার সংযোগ প্রয়োজন।</div>
+<section id="dashboard" class="page active">
+<div class="grid">
+<div class="card stat"><div class="ico">♙</div><div><small>নোট আদায়কৃত চাঁদা</small><strong id="dashDues">৳ ০</strong></div></div>
+<div class="card stat"><div class="ico">↗</div><div><small>নোট আয়</small><strong id="dashIncome">৳ ০</strong></div></div>
+<div class="card stat"><div class="ico">↘</div><div><small>নোট ব্যয়</small><strong id="dashExpense">৳ ০</strong></div></div>
+<div class="card stat"><div class="ico">▣</div><div><small>বর্তমান ব্যালেন্স</small><strong id="dashBalance">৳ ০</strong></div></div></div>
+<div class="card jumma"><h3>🕌　জুমার কালেকশনের হিসাব</h3><div class="jummaGrid"><div><small>মোট জুমার কালেকশন</small><b id="jummaTotal">৳ ০</b></div><div><small>এই মাস</small><b id="jummaMonth">৳ ০</b></div></div><small style="display:block;margin-top:8px">জুমার দান খাতে এন্ট্রি করা আয় এখানে গণনা হবে।</small></div>
+<div class="card"><h3>♙　মুসল্লি / সদস্যদের জন্য ভিউয়ার কোড</h3><div class="muted">এই ডেমোতে কোডটি শুধু স্থানীয় নমুনা। ইন্টারনেটে অন্যদের দেখানোর জন্য প্রকাশ্য ভিউ লিংক এখনো সক্রিয় নয়।</div><div class="viewerCode" id="viewerCode">MASJID01</div><div class="actions no-print"><button class="secondary" onclick="copyCode()">লিংক/কোড কপি</button><button class="outline" onclick="newCode()">নতুন কোড তৈরি</button></div></div>
+<div class="card"><h3>◴　সাম্প্রতিক আয়-ব্যয়ের লেনদেন</h3><div id="recent"></div><div class="actions no-print"><button onclick="go('transactions')">আরও দেখুন →</button></div></div>
+<div class="card"><h3>▥　মাসভিত্তিক আয় ও ব্যয় <select id="chartYear" onchange="drawChart()" style="float:right"></select></h3><div id="chart" class="chart"></div><div class="muted" style="text-align:center;margin-top:8px">🟩 আয়　🟥 ব্যয়</div></div>
+</section>
+<section id="members" class="page"><div class="pagehead"><div><h2>সদস্য ও মাসিক চাঁদা</h2><div class="muted">সদস্যের মাসিক চাঁদা ও বছরভিত্তিক জমার হিসাব</div></div><div class="toolbar no-print"><select id="memberYear" onchange="renderMembers()"></select><button class="outline" onclick="exportMembers()">▣ এক্সেল ডাউনলোড</button><button onclick="document.getElementById('memberForm').scrollIntoView({behavior:'smooth'})">＋ নতুন সদস্য</button></div></div>
+<div class="card"><h3>নতুন সদস্য / সদস্য সম্পাদনা</h3><form id="memberForm"><input type="hidden" id="memberId"><div class="formgrid"><div class="field"><label>সদস্যের নাম *</label><input id="mName" required></div><div class="field"><label>মোবাইল</label><input id="mPhone"></div><div class="field"><label>ঠিকানা</label><input id="mAddress"></div><div class="field"><label>মাসিক চাঁদা (৳)</label><input id="mFee" type="number" min="0" value="0"></div><div class="field"><label>যোগদানের তারিখ</label><input id="mDate" type="date"></div></div><div class="actions"><button>সংরক্ষণ করুন</button><button type="button" class="secondary" onclick="resetMember()">বাতিল</button></div></form></div>
+<div class="card"><div class="toolbar"><input id="memberSearch" placeholder="সদস্য খুঁজুন..." oninput="renderMembers()"><span class="pill" id="memberCount">০ সদস্য</span></div><div id="memberTable"></div></div></section>
+<section id="transactions" class="page"><div class="pagehead"><div><h2>আয়-ব্যয়ের লেনদেন</h2><div class="muted">তারিখ, ধরন ও খাত অনুযায়ী হিসাব</div></div><button class="outline no-print" onclick="exportTransactions()">▣ এক্সেল ডাউনলোড</button></div>
+<div class="card"><h3>নতুন লেনদেন যোগ করুন</h3><form id="txnForm"><div class="formgrid"><div><label>লেনদেনের ধরন</label><select id="tType"><option value="income">আয়</option><option value="expense">ব্যয়</option></select></div><div><label>খাত</label><select id="tCategory"><option>মাসিক চাঁদা</option><option>জুমার দান</option><option>সাধারণ দান</option><option>বিশেষ অনুদান</option><option>বিদ্যুৎ বিল</option><option>ইমাম/মুয়াজ্জিন বেতন</option><option>পরিচ্ছন্নতা</option><option>মেরামত</option><option>পানি বিল</option><option>অন্যান্য</option></select></div><div><label>পরিমাণ (৳) *</label><input id="tAmount" type="number" min="1" required></div><div><label>নাম / বিবরণ</label><input id="tPerson"></div><div><label>তারিখ</label><input id="tDate" type="date" required></div><div><label>পেমেন্ট পদ্ধতি</label><select id="tMethod"><option>নগদ</option><option>বিকাশ</option><option>নগদ</option><option>ব্যাংক</option><option>অন্যান্য</option></select></div><div class="wide"><label>নোট / রসিদ নম্বর</label><input id="tNote"></div></div><div class="actions"><button>লেনদেন সংরক্ষণ</button></div></form></div>
+<div class="card"><div class="toolbar"><select id="txnFilter" onchange="renderTransactions()"><option value="all">সব লেনদেন</option><option value="income">শুধু আয়</option><option value="expense">শুধু ব্যয়</option></select><input type="month" id="txnMonth" onchange="renderTransactions()"></div><div id="txnTable"></div></div></section>
+<section id="reports" class="page"><div class="pagehead"><div><h2>মাসিক রিপোর্ট</h2><div class="muted">নির্বাচিত মাসের চাঁদা, বকেয়া ও আয়-ব্যয়</div></div><button onclick="window.print()">▣ রিপোর্ট প্রিন্ট / PDF</button></div><div class="card"><div class="toolbar"><select id="reportMonth"></select><input id="reportYear" type="number" min="2020" max="2100" value="2026"><button onclick="renderReport()">রিপোর্ট দেখুন</button></div><div class="grid" id="reportStats"></div><h3 style="margin-top:18px">নির্বাচিত মাসের লেনদেন</h3><div id="reportTxns"></div><h3 style="margin-top:18px">বকেয়া সদস্য (নির্বাচিত মাস)</h3><div id="reportDues"></div></div></section>
+<section id="committee" class="page"><div class="pagehead"><div><h2>মসজিদ কমিটি ও কর্মী</h2><div class="muted">কমিটি, ইমাম, মুয়াজ্জিন ও খাদেমের তথ্য</div></div><button onclick="document.getElementById('staffName').focus()">＋ নতুন যোগ করুন</button></div><div class="card"><form id="staffForm"><div class="formgrid"><div><label>নাম *</label><input id="staffName" required></div><div><label>পদ / দায়িত্ব</label><select id="staffRole"><option>সভাপতি</option><option>সেক্রেটারি</option><option>কোষাধ্যক্ষ</option><option>সদস্য</option><option>ইমাম</option><option>মুয়াজ্জিন</option><option>খাদেম</option><option>অন্যান্য</option></select></div><div><label>মোবাইল</label><input id="staffPhone"></div><div><label>মাসিক বেতন (৳)</label><input id="staffSalary" type="number" min="0"></div></div><div class="actions"><button>তথ্য সংরক্ষণ</button></div></form></div><div class="card"><div id="staffTable"></div></div></section>
+<section id="install" class="page"><div class="card"><h2>অ্যাপ ইনস্টল করুন</h2><p>Chrome-এর মেনু (⋮) খুলে “Add to Home screen” বা “Install app” নির্বাচন করুন। এই একক HTML ফাইলে প্রকৃত PWA অফলাইন ইনস্টল ম্যানিফেস্ট সংযুক্ত নেই; হোম স্ক্রিনে শর্টকাট তৈরি করা যেতে পারে।</p></div></section>
+<section id="about" class="page"><div class="card"><h2>মসজিদ হিসাব সম্পর্কে</h2><p>মসজিদের সদস্য, মাসিক চাঁদা, আয়-ব্যয়, কমিটি ও মাসিক রিপোর্ট ব্যবস্থাপনার জন্য তৈরি।</p></div></section>
+<section id="settings" class="page"><div class="card"><h2>সেটিংস</h2><label>মসজিদের নাম</label><input id="mosqueName" placeholder="মসজিদের নাম"><label style="margin-top:10px">ঠিকানা</label><input id="mosqueAddress" placeholder="মসজিদের ঠিকানা"><div class="actions"><button onclick="saveSettings()">সেভ করুন</button><button class="secondary" onclick="downloadBackup()">ব্যাকআপ ডাউনলোড</button><label class="btn secondary">ব্যাকআপ ফিরিয়ে আনুন <input type="file" accept=".json" hidden onchange="restoreBackup(event)"></label><button class="danger" onclick="wipe()">সব তথ্য মুছুন</button></div></div></section>
+<section id="more" class="page"><div class="more-list">
+<button onclick="go('reports')"><span class="more-icon">▣</span><b>মাসিক রিপোর্ট</b><span class="chev">›</span></button>
+<button onclick="go('committee')"><span class="more-icon">♟</span><b>কমিটি ও কর্মী</b><span class="chev">›</span></button>
+<button onclick="go('settings')"><span class="more-icon">♛</span><b>সাবস্ক্রিপশন</b><span class="chev">›</span></button>
+<button onclick="alert('ভিউয়ার কোড: '+db.viewer)"><span class="more-icon">⚿</span><b>ভিউয়ার কোড</b><span class="chev">›</span></button>
+<button onclick="go('settings')"><span class="more-icon">♙</span><b>আমার প্রোফাইল</b><span class="chev">›</span></button>
+<button onclick="go('about')"><span class="more-icon">ⓘ</span><b>আমার সম্পর্কে</b><span class="chev">›</span></button>
+<button onclick="go('install')"><span class="more-icon">⬇</span><b>অ্যাপ ইনস্টল করুন</b><span class="chev">›</span></button>
+<button onclick="renderAll();alert('তথ্য নতুন করে লোড হয়েছে।')"><span class="more-icon">⟳</span><b>তথ্য নতুন করে লোড</b><span class="chev">›</span></button>
+<button class="logout-row" onclick="alert('এই সংস্করণে লগআউট ব্যবস্থা সংযুক্ত নয়।')"><span class="more-icon">⇥</span><b>লগআউট</b><span class="chev">›</span></button>
+</div></section>
+</main>
+<nav class="bottom-nav">
+<button data-tab="dashboard" class="active" onclick="go('dashboard')"><span>▦</span><small>ড্যাশবোর্ড</small></button>
+<button data-tab="members" onclick="go('members')"><span>♟</span><small>সদস্য ও চাঁদা</small></button>
+<button data-tab="transactions" onclick="go('transactions')"><span>⇄</span><small>লেনদেন</small></button>
+<button data-tab="more" onclick="go('more')"><span>☰</span><small>আরও</small></button>
+</nav>
 <script>
-const $=id=>document.getElementById(id); const DBKEY='masjidHisabDataV1', DBNAME='masjidHisabBackupDB', STORE='snapshots';
-// কোডে ডিফল্ট হাদিয়াদাতার নাম/পরিমাণ চাইলে এখানে যোগ করুন: {name:'নাম', due:500, phone:'', start:'2024-10'}
-const DEFAULT_HADIA_MEMBERS = [
-  {name:'001 মো: ইউনূস আলী', due:100, phone:'', start:'2024-10'},
-  {name:'002 গোলজার হোসেন', due:100, phone:'', start:'2024-10'},
-  {name:'003 রুহুল আমিন', due:100, phone:'', start:'2024-10'},
-  {name:'004 আমিনুল ইসলাম ১', due:200, phone:'', start:'2024-10'},
-  {name:'005 মমিনুল ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'006 মাহাবুবুর রাহমান (দুদু)', due:200, phone:'', start:'2024-10'},
-  {name:'007 মোশারফ মাস্টার', due:200, phone:'', start:'2024-10'},
-  {name:'008 বকুল মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'009 চান মিয়া বিডিয়ার', due:100, phone:'', start:'2024-10'},
-  {name:'010 দুলাল বিডিয়ার', due:200, phone:'', start:'2024-10'},
-  {name:'011 মফিজুল ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'012 ইসমাইল হোসেন', due:100, phone:'', start:'2024-10'},
-  {name:'013 সুলাইমান হোসেন', due:100, phone:'', start:'2024-10'},
-  {name:'014 সফিকুল বিডিয়ার', due:0, phone:'', start:'2024-10'},
-  {name:'015 নূর ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'016 জিয়ারুল ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'017 সিরাজুল ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'018 মোফাজ্জল হোসেন', due:50, phone:'', start:'2024-10'},
-  {name:'019 রাজ্জাক মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'020 রায়হান মিয়া', due:50, phone:'', start:'2024-10'},
-  {name:'070 আল্লি দর্জি', due:100, phone:'', start:'2024-10'},
-  {name:'021 সাত্তার মিয়া', due:50, phone:'', start:'2024-10'},
-  {name:'022 ফাতেমা', due:50, phone:'', start:'2024-10'},
-  {name:'023 মশিউর রহমান', due:50, phone:'', start:'2024-10'},
-  {name:'024 লিটন', due:50, phone:'', start:'2024-10'},
-  {name:'025 রহিম মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'026 করিম মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'027 রফিকুল ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'028 আতিকুর ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'029 মুক্তার হোসেন', due:50, phone:'', start:'2024-10'},
-  {name:'030 সাজেদা বেগম', due:50, phone:'', start:'2024-10'},
-  {name:'031 সুলতান আহমেদ', due:50, phone:'', start:'2024-10'},
-  {name:'032 আজিজুর ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'033 আমিনুল ইসলাম ২', due:50, phone:'', start:'2024-10'},
-  {name:'034 বেদারুল ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'035 আশরাফুল ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'036 আমেনা বেগম', due:50, phone:'', start:'2024-10'},
-  {name:'071 হামিদুল ইসলাম', due:50, phone:'', start:'2024-10'},
-  {name:'037 বাবু মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'038 আমজাদ ডাক্তার', due:100, phone:'', start:'2024-10'},
-  {name:'039 বামনি (মোমেনা)', due:50, phone:'', start:'2024-10'},
-  {name:'040 জালাল মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'041 সালাম মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'042 আনারুল ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'043 কুদ্দুস আলী ১', due:100, phone:'', start:'2024-10'},
-  {name:'044 একরামুল হক', due:100, phone:'', start:'2024-10'},
-  {name:'045 সবুজ লন্ড্রি', due:100, phone:'', start:'2024-10'},
-  {name:'046 আমিনুল ইসলাম ৩', due:100, phone:'', start:'2024-10'},
-  {name:'047 নূরনবী ইসলাম', due:100, phone:'', start:'2024-10'},
-  {name:'048 আমজাদ হোসেন', due:50, phone:'', start:'2024-10'},
-  {name:'049 শাহীন মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'050 এরশাদ', due:50, phone:'', start:'2024-10'},
-  {name:'051 আলতাফ', due:100, phone:'', start:'2024-10'},
-  {name:'052 আনোয়ারা', due:50, phone:'', start:'2024-10'},
-  {name:'053 ফারুক মিয়া', due:100, phone:'', start:'2024-10'},
-  {name:'054 মহিরন', due:50, phone:'', start:'2024-10'},
-  {name:'055 কুদ্দুস আলী ২', due:100, phone:'', start:'2024-10'},
-  {name:'056 ইউসুফ আলী', due:100, phone:'', start:'2024-10'},
-  {name:'057 ওসমান গনি', due:50, phone:'', start:'2024-10'},
-  {name:'058 রুবেল', due:100, phone:'', start:'2024-10'},
-  {name:'059 নূর আমিন', due:100, phone:'', start:'2024-10'},
-  {name:'060 সাজু', due:100, phone:'', start:'2024-10'},
-  {name:'061 মোন্নাফ', due:50, phone:'', start:'2024-10'},
-  {name:'062 জলিল', due:100, phone:'', start:'2024-10'},
-  {name:'063 নূর আমিন ব্যাবসায়ী', due:100, phone:'', start:'2024-10'},
-  {name:'064 ওমর আলী', due:50, phone:'', start:'2024-10'},
-  {name:'065 মিঠু', due:100, phone:'', start:'2024-10'},
-  {name:'066 দিলজন', due:50, phone:'', start:'2024-10'},
-  {name:'067 লাইলি', due:50, phone:'', start:'2024-10'},
-  {name:'068 আতারুল', due:50, phone:'', start:'2024-10'},
-  {name:'069 রাসেদা', due:50, phone:'', start:'2024-10'}
-];
-let data={version:1,settings:{name:'',address:'',phone:'',prefix:'MZ',openingCash:0,openingBank:0,bankBalance:null},transactions:[],members:[],payments:[],bankHistory:[],defaultMembers:DEFAULT_HADIA_MEMBERS.map(m=>({...m})),salaryRates:{},nextReceipt:1};
-const today=()=>new Date().toISOString().slice(0,10), monthNow=()=>today().slice(0,7), money=n=>'৳'+Number(n||0).toLocaleString('bn-BD',{maximumFractionDigits:2}); const monthLabel=m=>m?new Date(m+'-01T00:00:00').toLocaleDateString('bn-BD',{month:'long',year:'numeric'}):'';
-function load(){try{const x=JSON.parse(localStorage.getItem(DBKEY)||'null');if(x&&x.version===1){data={...data,...x,settings:{...data.settings,...x.settings},salaryRates:{...(x.salaryRates||{})},defaultMembers:Array.isArray(x.defaultMembers)&&x.defaultMembers.length?x.defaultMembers:DEFAULT_HADIA_MEMBERS.map(m=>({...m})),bankHistory:Array.isArray(x.bankHistory)?x.bankHistory:[]};if(data.settings.bankBalance===undefined||data.settings.bankBalance===null){data.settings.bankBalance=Number(data.settings.openingBank||0)+data.transactions.filter(t=>t.account==='bank'&&t.type==='income').reduce((a,t)=>a+Number(t.amount||0),0)-data.transactions.filter(t=>t.account==='bank'&&t.type==='expense').reduce((a,t)=>a+Number(t.amount||0),0);}}}catch(e){console.warn(e)} }
-function save(){localStorage.setItem(DBKEY,JSON.stringify(data)); localBackup(); render(); scheduleCloudBackup()}
-function openDB(){return new Promise((resolve,reject)=>{const req=indexedDB.open(DBNAME,1);req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE,{keyPath:'id',autoIncrement:true})};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error)})}
-async function localBackup(){try{const db=await openDB();const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).add({at:new Date().toISOString(),data:JSON.parse(JSON.stringify(data))});tx.oncomplete=async()=>{const db2=await openDB();const all=await new Promise((res,rej)=>{const r=db2.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});if(all.length>35){const old=all.sort((a,b)=>a.id-b.id).slice(0,all.length-35);const t=db2.transaction(STORE,'readwrite');old.forEach(o=>t.objectStore(STORE).delete(o.id))}renderBackupHistory()}}catch(e){console.warn('লোকাল ব্যাকআপ ব্যর্থ',e);$('backupStatus').textContent='সতর্কতা: IndexedDB ব্যাকআপ তৈরি করা যায়নি; ফাইল ডাউনলোড করুন।';$('backupStatus').className='status warn'}}
-function go(id){document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.mobile-bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.mobileTab===id));if(id==='receipts')renderReceipts();if(id==='hadia')renderMembers();if(id==='funds')renderFunds();if(id==='reports')runReport();if(id==='backup')renderBackupHistory();window.scrollTo(0,0)}
-document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.tab));
-document.querySelectorAll('.mobile-bottom-nav button').forEach(b=>b.onclick=()=>{const id=b.dataset.mobileTab;if(id==='print'){window.print();return}document.querySelectorAll('.mobile-bottom-nav button').forEach(x=>x.classList.toggle('active',x===b));go(id)});
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function txSum(type,filter=()=>true){return data.transactions.filter(t=>t.type===type&&filter(t)).reduce((a,t)=>a+Number(t.amount),0)}
-function balances(){return {cash:Number(data.settings.openingCash||0)+txSum('income',t=>t.account!=='bank')-txSum('expense',t=>t.account!=='bank'),bank:Number(data.settings.bankBalance??data.settings.openingBank??0)}}
-function render(){ $('appTitle').textContent='🕌 '+(data.settings.name||'মসজিদ পূর্ণাঙ্গ হিসাব'); const b=balances(),income=txSum('income'),expense=txSum('expense'),due=calcAllDue(monthNow()),paid=data.payments.reduce((a,p)=>a+Number(p.amount||0),0),monthly=data.members.reduce((a,m)=>a+Number(m.due||0),0);$('summary').innerHTML=[['মোট আয়',money(income),'৳','income'],['মোট ব্যয়',money(expense),'▣','expense'],['বর্তমান স্থিতি',money(b.cash-b.bank),'↗','cash']].map(([k,v,ico,kind],i)=>`<button type="button" class="card summary-card summary-${kind}" data-summary-detail="${i===2?2:i}" aria-label="${k} বিস্তারিত দেখুন"><span class="summary-top"><span class="summary-icon">${ico}</span><span class="k">${k}</span></span><span class="v">${v}</span></button>`).join('');$('homeMosqueName').textContent=data.settings.name||'মসজিদের হিসাব';$('homeToday').textContent=new Date().toLocaleDateString('bn-BD',{day:'2-digit',month:'long',year:'numeric'});renderTx();renderRecent();renderFunds();renderMembers();renderDefaultMembers();populateYears();fillSettings() }
-function summaryDetailTable(title,rows){if(!rows.length)return `<div class="empty">${title} এর কোনো তথ্য নেই।</div>`;return `<div class="tablewrap"><table><thead><tr>${Object.keys(rows[0]).map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${Object.values(r).map(v=>`<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
-function showSummaryDetail(index){const modal=$('summaryDetail'),title=$('summaryDetailTitle'),body=$('summaryDetailContent');const b=balances(),through=monthNow();let html='';const all=[...data.transactions].sort((a,z)=>z.date.localeCompare(a.date));
- if(index===0||index===1){const type=index===0?'income':'expense',label=index===0?'মোট আয়ের বিবরণ':'মোট ব্যয়ের বিবরণ',items=all.filter(t=>t.type===type);title.textContent=label;html=`<div class="detail-total">${money(txSum(type))}</div><p class="hint">তারিখ, খাত ও বিবরণ অনুযায়ী সব ${index===0?'আয়':'ব্যয়'} লেনদেন।</p>${txTableReadOnly(items)}`}
- else if(index===2){title.textContent='বর্তমান স্থিতির বিস্তারিত (নগদ − ব্যাংক)';const inc=txSum('income',t=>t.account!=='bank'),out=txSum('expense',t=>t.account!=='bank');html=`<div class="detail-total">বর্তমান স্থিতি: ${money(b.cash-b.bank)}</div><div class="grid"><div class="card"><div class="k">নগদ ব্যালেন্স (সকল লেনদেন)</div><div class="v">${money(b.cash)}</div></div><div class="card"><div class="k">ব্যাংক ব্যালেন্স</div><div class="v">${money(b.bank)}</div></div><div class="card"><div class="k">নগদ − ব্যাংক</div><div class="v">${money(b.cash-b.bank)}</div></div></div><div class="grid"><div class="card"><div class="k">প্রারম্ভিক নগদ</div><div class="v">${money(data.settings.openingCash)}</div></div><div class="card"><div class="k">নগদ আয়</div><div class="v">${money(inc)}</div></div><div class="card"><div class="k">নগদ ব্যয়</div><div class="v">${money(out)}</div></div></div><h3>নগদ লেনদেন</h3>${txTableReadOnly(all.filter(t=>t.account!=='bank'))}`}
- else if(index===3){title.textContent='ব্যাংক জমার বিস্তারিত (স্থির)';html=`<div class="detail-total">ব্যাংক ব্যালেন্স: ${money(b.bank)}</div><p class="hint">সাধারণ আয়-ব্যয় বা হাদিয়ার লেনদেন ব্যাংক ব্যালেন্স পরিবর্তন করে না। পরিবর্তন শুধু ব্যাংক PIN যাচাই করে করা যায়।</p><h3>পরিবর্তনের ইতিহাস</h3>${$('bankHistory').innerHTML}`}
- else if(index===4){title.textContent='মোট হাদিয়া বকেয়ার বিস্তারিত';const rows=data.members.map(m=>{const x=calcMemberHadiaSummary(m,through);return {...m,summary:x}}).filter(x=>x.summary.remaining>0);html=`<div class="detail-total">মোট বকেয়া: ${money(calcAllDue(through))}</div><p class="hint">হিসাবের সময়সীমা: ${monthLabel(through)}</p>${rows.length?`<div class="tablewrap"><table><thead><tr><th>হাদিয়াদাতা</th><th>মাসিক নির্ধারিত</th><th>মোট নির্ধারিত</th><th>জমা</th><th>বাকি</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(x.name)}</td><td class="num">${money(x.due)}</td><td class="num">${money(x.summary.totalDue)}</td><td class="num">${money(x.summary.collected)}</td><td class="num"><b>${money(x.summary.remaining)}</b></td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">কোনো হাদিয়া বকেয়া নেই।</div>'}`}
- else if(index===5){title.textContent='মোট হাদিয়া জমার বিস্তারিত';const payments=[...(data.payments||[])].sort((a,z)=>(z.date||'').localeCompare(a.date||''));html=`<div class="detail-total">মোট জমা: ${money(data.payments.reduce((a,p)=>a+Number(p.amount||0),0))}</div>${payments.length?`<div class="tablewrap"><table><thead><tr><th>জমার তারিখ</th><th>হাদিয়াদাতা</th><th>যে মাসের হাদিয়া</th><th>টাকা</th></tr></thead><tbody>${payments.map(p=>{const m=data.members.find(x=>x.id===p.memberId);return `<tr><td>${esc(p.date||'—')}</td><td>${esc(m?.name||p.name||'—')}</td><td>${esc(p.month||'—')}</td><td class="num">${money(p.amount)}</td></tr>`}).join('')}</tbody></table></div>`:'<div class="empty">এখনো কোনো হাদিয়া জমা নেই।</div>'}`}
- else {title.textContent='বর্তমান মাসিক হাদিয়ার বিস্তারিত';const members=[...data.members].sort((a,z)=>(a.name||'').localeCompare(z.name||'','bn'));html=`<div class="detail-total">মাসিক নির্ধারিত মোট: ${money(members.reduce((a,m)=>a+Number(m.due||0),0))}</div><div class="hint">মোট ${members.length} জন হাদিয়াদাতা • বর্তমান নির্ধারিত মাসিক হাদিয়া</div>${members.length?`<div class="tablewrap"><table><thead><tr><th>হাদিয়াদাতার নাম</th><th>মাসিক হাদিয়া</th><th>শুরু মাস</th></tr></thead><tbody>${members.map(m=>`<tr><td>${esc(m.name)}</td><td class="num">${money(m.due)}</td><td>${esc(m.start||'—')}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">এখনো কোনো হাদিয়াদাতা যোগ করা হয়নি।</div>'}`}
- body.innerHTML=html;modal.classList.add('open');document.body.style.overflow='hidden'}
-document.addEventListener('click',e=>{const card=e.target.closest('[data-summary-detail]');if(card)showSummaryDetail(Number(card.dataset.summaryDetail))});function closeSummaryDetail(){$('summaryDetail').classList.remove('open');document.body.style.overflow=''}$('closeSummaryDetail').onclick=closeSummaryDetail;$('summaryDetail').addEventListener('click',e=>{if(e.target===$('summaryDetail'))closeSummaryDetail()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSummaryDetail()});
-function txTableReadOnly(ts){if(!ts.length)return '<div class="empty">এখনো কোনো লেনদেন নেই</div>';return `<table><thead><tr><th>তারিখ</th><th>রসিদ/ভাউচার</th><th>ধরন</th><th>খাত</th><th>নাম/বিবরণ</th><th>টাকা</th><th class="no-print">কাজ</th></tr></thead><tbody>${ts.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.refno||'—')}</td><td><span class="pill">${t.type==='income'?'আয়':'ব্যয়'}</span></td><td>${esc(t.category)}</td><td>${esc(t.person||t.note||'—')}<br><small>${t.account==='bank'?'ব্যাংক':'নগদ'}</small></td><td class="num">${money(t.amount)}</td><td class="no-print"><button class="btn secondary small" onclick="printReceipt('${t.id}')">প্রিন্ট</button></td></tr>`).join('')}</tbody></table>`}
-function renderRecent(){let ts=[...data.transactions].sort((a,b)=>(b.date+b.id).localeCompare(a.date+a.id)).slice(0,8);$('recent').innerHTML=txTable(ts)}function txTable(ts){if(!ts.length)return '<div class="empty">এখনো কোনো লেনদেন নেই</div>';return `<table><thead><tr><th>তারিখ</th><th>রসিদ/ভাউচার</th><th>ধরন</th><th>খাত</th><th>নাম/বিবরণ</th><th>টাকা</th><th class="no-print">কাজ</th></tr></thead><tbody>${ts.map(t=>`<tr><td>${esc(t.date)}</td><td>${esc(t.refno||'—')}</td><td><span class="pill">${t.type==='income'?'আয়':'ব্যয়'}</span></td><td>${esc(t.category)}</td><td>${esc(t.person||t.note||'—')}<br><small>${t.account==='bank'?'ব্যাংক':'নগদ'}</small></td><td class="num">${money(t.amount)}</td><td class="no-print"><div class="actions"><button class="btn secondary small" onclick="editTx('${t.id}')">ইডিট</button><button class="btn secondary small" onclick="printReceipt('${t.id}')">প্রিন্ট</button><button class="btn danger small" onclick="deleteTx('${t.id}')">মুছুন</button></div></td></tr>`).join('')}</tbody></table>`}
-function renderTx(){let m=$('filterMonth').value,typ=$('filterType').value;let ts=[...data.transactions].filter(t=>(!m||t.date.startsWith(m))&&(typ==='all'||t.type===typ)).sort((a,b)=>b.date.localeCompare(a.date));$('txList').innerHTML=txTable(ts)}$('filterMonth').value=monthNow();$('filterType').onchange=renderTx;$('filterMonth').onchange=renderTx;$('clearFilters').onclick=()=>{$('filterMonth').value='';$('filterType').value='all';renderTx()};$('date').value=today();$('payDate').value=today();$('payMonth').value=monthNow();$('memberStart').value='2024-10';$('dueThrough').value=monthNow();$('reportMonth').value=monthNow();
-$('txForm').onsubmit=e=>{e.preventDefault();const t={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),type:$('type').value,date:$('date').value,amount:Number($('amount').value),category:$('category').value,account:'cash',refno:$('refno').value.trim(),person:$('person').value.trim(),note:$('note').value.trim()};if(!(t.amount>0))return alert('সঠিক টাকার পরিমাণ দিন');if(!t.refno)t.refno=(data.settings.prefix||'MZ')+'-'+String(data.nextReceipt++).padStart(5,'0');data.transactions.push(t);if(t.type==='income'&&t.category==='দান')setTimeout(()=>printReceipt(t.id),150);$('txForm').reset();$('date').value=today();save();alert('লেনদেন সংরক্ষণ হয়েছে। রসিদ/ভাউচার: '+t.refno)};$('clearTx').onclick=()=>$('txForm').reset();
-function editTx(id){const t=data.transactions.find(x=>String(x.id)===String(id));if(!t)return alert('লেনদেনটি পাওয়া যায়নি।');const date=prompt('লেনদেনের তারিখ লিখুন (YYYY-MM-DD):',t.date||today());if(date===null)return;if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||Number(date.slice(5,7))<1||Number(date.slice(5,7))>12||Number(date.slice(8,10))<1||Number(date.slice(8,10))>31)return alert('সঠিক তারিখ দিন, যেমন 2026-10-25।');const category=prompt('খাত লিখুন:',t.category||'অন্যান্য');if(category===null)return;if(!category.trim())return alert('খাত খালি রাখা যাবে না।');const amountText=prompt('টাকার পরিমাণ লিখুন:',String(t.amount??''));if(amountText===null)return;const amount=Number(amountText.replace(/,/g,''));if(!Number.isFinite(amount)||amount<=0)return alert('সঠিক টাকার পরিমাণ দিন।');if(!confirm('তারিখ, খাত ও টাকার পরিবর্তন সংরক্ষণ করবেন?'))return;t.date=date;t.category=category.trim();t.amount=amount;save();alert('লেনদেনের তারিখ, খাত ও টাকার পরিমাণ আপডেট হয়েছে।')}
-function deleteTx(id){if(!confirm('এই লেনদেন মুছবেন? এই কাজটি আগের ব্যাকআপ থেকে ছাড়া ফেরানো যাবে না।'))return;data.transactions=data.transactions.filter(t=>t.id!==id);save()}
-function renderReceipts(){
- const name=($('receiptSearchName')?.value||'').trim().toLocaleLowerCase(),no=($('receiptSearchNo')?.value||'').trim().toLocaleLowerCase(),typ=$('receiptFilterType')?.value||'all',month=$('receiptFilterMonth')?.value||'';
- const items=[...data.transactions].filter(t=>(typ==='all'||t.type===typ)&&(!month||String(t.date||'').startsWith(month))&&(!name||String(t.person||'').toLocaleLowerCase().includes(name))&&(!no||String(t.refno||'').toLocaleLowerCase().includes(no))).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
- const out=$('receiptListTable');if(!out)return;
- out.innerHTML=items.length?`<table><thead><tr><th class="no-print">নির্বাচন</th><th>তারিখ</th><th>রসিদ / ভাউচার নং</th><th>নাম</th><th>খাত</th><th>ধরন</th><th>টাকা</th><th class="no-print">প্রিন্ট</th></tr></thead><tbody>${items.map(t=>`<tr><td class="no-print"><input type="checkbox" class="receipt-row-check" value="${esc(t.id)}" aria-label="রসিদ নির্বাচন"></td><td>${esc(t.date||'—')}</td><td><b>${esc(t.refno||'—')}</b></td><td>${esc(t.person||'নাম উল্লেখ নেই')}</td><td>${esc(t.category||'—')}</td><td>${t.type==='expense'?'ব্যয়':'আয়'}</td><td class="num">${money(t.amount)}</td><td class="no-print"><button type="button" class="btn secondary small receipt-single-print" data-id="${esc(t.id)}">প্রিন্ট</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">আপনার অনুসন্ধান অনুযায়ী কোনো রসিদ পাওয়া যায়নি।</div>';
- updateReceiptListCount();
-}
-function updateReceiptListCount(){const checks=[...document.querySelectorAll('.receipt-row-check:checked')];const count=$('receiptSelectedCount');if(count)count.textContent=checks.length.toLocaleString('bn-BD')+' / ৩ নির্বাচিত';}
-['receiptSearchName','receiptSearchNo','receiptFilterType','receiptFilterMonth'].forEach(id=>{const el=$(id);if(el)el.addEventListener('input',renderReceipts)});
-$('receiptFilterClear').onclick=()=>{$('receiptSearchName').value='';$('receiptSearchNo').value='';$('receiptFilterType').value='all';$('receiptFilterMonth').value='';renderReceipts()};
-$('receiptListTable').addEventListener('change',e=>{if(!e.target.classList.contains('receipt-row-check'))return;const checked=[...document.querySelectorAll('.receipt-row-check:checked')];if(checked.length>3){e.target.checked=false;alert('একসঙ্গে সর্বোচ্চ ৩টি রসিদ নির্বাচন করতে পারবেন।')}updateReceiptListCount()});
-$('receiptListTable').addEventListener('click',e=>{const b=e.target.closest('.receipt-single-print');if(b)printReceipt(b.dataset.id)});
-$('receiptPrintSelected').onclick=()=>{const ids=[...document.querySelectorAll('.receipt-row-check:checked')].map(x=>x.value);if(!ids.length)return alert('প্রিন্ট করার জন্য অন্তত ১টি রসিদ নির্বাচন করুন।');if(ids.length>3)return alert('একসঙ্গে সর্বোচ্চ ৩টি রসিদ প্রিন্ট করা যাবে।');const chosen=ids.map(id=>data.transactions.find(t=>String(t.id)===String(id))).filter(Boolean);if(chosen.length)printReceiptBatch(chosen)};
-function receiptCard(t,s){
- const title=t.category==='মাসিক হাদিয়া'?'মাসিক হাদিয়া জমার রসিদ':t.type==='expense'?'ব্যয় / বেতন প্রদানের রসিদ':(t.category==='নির্মাণ তহবিল'||t.category==='বিশেষ তহবিল')?'তহবিলে জমার রসিদ':'মসজিদ দান রশিদ';
- const personLabel=t.type==='expense'?'প্রাপক':'দাতার নাম';
- return `<section class="multi-receipt premium-receipt">
-  <div class="receipt-topline"><span>✦</span><span>بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span><span>✦</span></div>
-  <div class="receipt-heading"><div class="receipt-mosque" aria-hidden="true">🕌</div><div class="receipt-heading-text"><div class="receipt-kicker">আল্লাহর সন্তুষ্টির জন্য দান করুন</div><h1>${esc(s.name||'মসজিদ')}</h1><p>${esc(s.address||'')}${s.phone?' • '+esc(s.phone):''}</p></div><div class="receipt-no">রসিদ নং<strong>${esc(t.refno||'—')}</strong></div></div>
-  <div class="receipt-titlebar"><span>❧</span><h2>${title}</h2><span>❧</span></div>
-  <div class="receipt-fields"><div class="receipt-field"><span>তারিখ</span><b>${esc(t.date||'—')}</b></div><div class="receipt-field"><span>${personLabel}</span><b>${esc(t.person||'নাম উল্লেখ নেই')}</b></div><div class="receipt-field"><span>দান / খাত</span><b>${esc(t.category||'—')}</b></div></div>
-  <div class="receipt-amount"><div class="amount-label">${t.type==='expense'?'প্রদত্ত টাকার পরিমাণ':'প্রাপ্ত টাকার পরিমাণ'}</div><strong>${money(t.amount)}</strong><small>কথায়: ${numberWords(t.amount)} টাকা মাত্র</small></div>
-  <div class="receipt-note"><b>বিবরণ:</b> ${esc(t.note||'—')}</div>
-  <div class="receipt-dua">আপনার সহযোগিতার জন্য আন্তরিক ধন্যবাদ।<br>আল্লাহ তাআলা আপনাকে উত্তম প্রতিদান দান করুন। আমিন।</div>
-  <div class="print-signatures"><span>${t.type==='expense'?'গ্রহণকারীর স্বাক্ষর':'দাতার স্বাক্ষর'}</span><span>দায়িত্বপ্রাপ্ত স্বাক্ষর</span></div>
-  <div class="receipt-bottomline">মসজিদ কমিটির পক্ষ থেকে কৃতজ্ঞতা • রসিদটি সংরক্ষণ করুন</div>
- </section>`;
-}
-function printReceiptBatch(items){
- const s=data.settings;
- const cards=items.map(t=>receiptCard(t,s)).join('');
- $('receiptPrint').classList.remove('hide');
- $('receiptPrint').innerHTML=`<div class="multi-sheet">${cards}</div>`;
- window.print();
- setTimeout(()=>{$('receiptPrint').classList.add('hide');$('receiptPrint').innerHTML=''},1500);
-}
-function printReceipt(id){const t=data.transactions.find(x=>x.id===id);if(!t)return;printReceiptBatch([t])}
-function numberWords(num){let n=Math.floor(Number(num)||0);if(n===0)return 'শূন্য';const ones=['','এক','দুই','তিন','চার','পাঁচ','ছয়','সাত','আট','নয়','দশ','এগারো','বারো','তেরো','চৌদ্দ','পনেরো','ষোলো','সতেরো','আঠারো','উনিশ'];const tens=['','','বিশ','ত্রিশ','চল্লিশ','পঞ্চাশ','ষাট','সত্তর','আশি','নব্বই'];function under100(x){return x<20?ones[x]:tens[Math.floor(x/10)]+(x%10?ones[x%10]:'')}let out=[];let units=[[10000000,'কোটি'],[100000,'লক্ষ'],[1000,'হাজার'],[100,'শত']];for(const [v,label] of units){if(n>=v){let q=Math.floor(n/v);out.push((q<100?under100(q):String(q))+' '+label);n%=v}}if(n)out.push(under100(n));return out.join(' ')}
-function calcMemberHadiaSummary(member,through){if(!through)return {months:0,totalDue:0,collected:0,remaining:0};const [sy,sm]=member.start.split('-').map(Number),[ey,em]=through.split('-').map(Number);const months=Math.max(0,(ey-sy)*12+em-sm+1),totalDue=months*Number(member.due||0),collected=data.payments.filter(p=>p.memberId===member.id&&p.month>=member.start&&p.month<=through).reduce((a,p)=>a+Number(p.amount||0),0);return {months,totalDue,collected,remaining:Math.max(0,totalDue-collected)}}function calcMemberDue(member,through){return calcMemberHadiaSummary(member,through).remaining}function calcAllDue(m){return data.members.reduce((a,x)=>a+calcMemberDue(x,m),0)}
-$('memberForm').onsubmit=e=>{e.preventDefault();data.members.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),name:$('memberName').value.trim(),phone:$('memberPhone').value.trim(),due:Number($('memberDue').value),start:$('memberStart').value});$('memberForm').reset();$('memberStart').value='2024-10';save();alert('হাদিয়াদাতার তথ্য সংরক্ষিত হয়েছে')};
-function renderMembers(){const sel=$('payMember');if(sel){sel.innerHTML=data.members.map(m=>`<option value="${m.id}">${esc(m.name)} — ${money(m.due)}/মাস</option>`).join('');if(!data.members.length)sel.innerHTML='<option value="">আগে হাদিয়াদাতা যোগ করুন</option>'}const searchSel=$('hadiaSearchMember');if(searchSel){const previous=searchSel.value;searchSel.innerHTML='<option value="">সব হাদিয়াদাতা দেখুন</option>'+[...data.members].sort((a,b)=>(a.name||'').localeCompare(b.name||'','bn')).map(m=>`<option value="${esc(m.id)}">${esc(m.name)}</option>`).join('');if([...searchSel.options].some(o=>o.value===previous))searchSel.value=previous}const through=$('dueThrough')?.value||monthNow();$('memberList').innerHTML=!data.members.length?'<div class="empty">এখনো কোনো হাদিয়াদাতা যোগ করা হয়নি</div>':`<table><thead><tr><th>নাম</th><th>মোবাইল</th><th>মাসিক হাদিয়া</th><th>শুরু</th><th>নির্ধারিত মোট</th><th>মোট আদায়</th><th>বাকি</th><th class="no-print">কাজ</th></tr></thead><tbody>${data.members.map(m=>{const s=calcMemberHadiaSummary(m,through);return `<tr><td>${esc(m.name)}</td><td>${esc(m.phone||'—')}</td><td>${money(m.due)}</td><td>${esc(m.start)}</td><td class="num">${money(s.totalDue)}</td><td class="num">${money(s.collected)}</td><td class="num"><b>${money(s.remaining)}</b></td><td class="no-print"><div class="actions"><button class="btn secondary small" onclick="editMember('${m.id}')">ইডিট</button><button class="btn danger small" onclick="deleteMember('${m.id}')">মুছুন</button></div></td></tr>`}).join('')}</tbody></table>`}
-function renderDefaultMembers(){const el=$('defaultMembersText');if(!el)return;el.value=(data.defaultMembers||[]).map(m=>[m.name,Number(m.due||0),m.phone||'',m.start||'2024-10'].join(' | ')).join('\n')}
-$('saveDefaultMembers').onclick=()=>{const lines=$('defaultMembersText').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);const parsed=[];for(let i=0;i<lines.length;i++){const parts=lines[i].split('|').map(x=>x.trim());const name=parts[0]||'',due=Number((parts[1]||'').replace(/[^0-9.]/g,'')),phone=parts[2]||'',start=parts[3]||'2024-10';if(!name||!(due>=0)||!/^\d{4}-\d{2}$/.test(start)){alert('লাইন '+(i+1)+' ঠিক করুন। ফরম্যাট: নাম | মাসিক হাদিয়া | মোবাইল | YYYY-MM');return}parsed.push({name,due,phone,start})}data.defaultMembers=parsed;save();renderDefaultMembers();alert('ডিফল্ট তালিকা সংরক্ষণ হয়েছে। পুরোনো হিসাব অপরিবর্তিত আছে।')};
-$('addDefaultMembers').onclick=()=>{const templates=data.defaultMembers||[];if(!templates.length)return alert('আগে ডিফল্ট তালিকায় নাম ও মাসিক হাদিয়া লিখে সংরক্ষণ করুন।');let added=0;for(const m of templates){if(data.members.some(x=>x.name.trim().toLocaleLowerCase()===m.name.trim().toLocaleLowerCase()))continue;data.members.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random().toString(36).slice(2),name:m.name,phone:m.phone||'',due:Number(m.due||0),start:m.start||'2024-10'});added++}save();alert(added+' জন নতুন হাদিয়াদাতা যোগ হয়েছে। আগে থেকে থাকা সদস্য বা হিসাব মুছা/পরিবর্তন করা হয়নি।')};
-$('dueThrough').onchange=()=>{renderMembers();if($('searchDueThrough')){$('searchDueThrough').value=$('dueThrough').value;renderHadiaSearch()}};
-function renderHadiaSearch(){
- const through=$('searchDueThrough')?.value||monthNow(),out=$('hadiaSearchResult');
- if(!out)return;
- const selectedId=$('hadiaSearchMember')?.value||'';const matches=[...data.members].filter(m=>!selectedId||String(m.id)===String(selectedId)).sort((a,b)=>(a.name||'').localeCompare(b.name||'','bn'));
- if(!matches.length){out.innerHTML='<div class="empty">এখনো কোনো হাদিয়াদাতা যোগ করা হয়নি। আগে হাদিয়াদাতার তালিকায় নাম যোগ করুন।</div>';return}
- out.innerHTML=matches.map(m=>{
-  const sum=calcMemberHadiaSummary(m,through),[sy,sm]=String(m.start||through).split('-').map(Number),[ey,em]=through.split('-').map(Number);
-  const months=Math.max(0,(ey-sy)*12+em-sm+1);
-  return `<div class="card" style="margin-bottom:12px"><h3 style="margin:0 0 8px">${esc(m.name)}</h3><div class="hint">মোবাইল: ${esc(m.phone||'উল্লেখ নেই')} • মাসিক হাদিয়া: ${money(m.due)}</div><div class="actions no-print" style="margin-top:10px"><button class="btn small" type="button" onclick="selectHadiaPayer('${String(m.id).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">এই হাদিয়াদাতার হাদিয়া আদায় করুন</button></div><div class="grid" style="margin-top:10px"><div class="card"><div class="k">মাসিক নির্ধারিত হাদিয়া</div><div class="v">${money(m.due)}</div></div><div class="card"><div class="k">নির্ধারিত মোট হাদিয়া</div><div class="v">${money(sum.totalDue)}</div></div><div class="card"><div class="k">মোট জমা হাদিয়া</div><div class="v">${money(sum.collected)}</div></div><div class="card"><div class="k">মোট বকেয়া টাকা</div><div class="v" style="color:var(--red)">${money(sum.remaining)}</div></div><div class="card"><div class="k">বাকি মাসের সংখ্যা</div><div class="v">${Math.max(0,months-(Number(m.due)>0?Math.floor(sum.collected/Number(m.due)):0)).toLocaleString('bn-BD')}</div></div><div class="card"><div class="k">জমা হাদিয়ার সমান মাস</div><div class="v">${Number(m.due)>0?Math.floor(sum.collected/Number(m.due)).toLocaleString('bn-BD'):'—'} মাস</div><div class="hint">মোট জমা ÷ মাসিক নির্ধারিত হাদিয়া</div></div></div></div>`
- }).join('');
-}
-function selectHadiaPayer(memberId){
- const sel=$('payMember'),member=data.members.find(m=>String(m.id)===String(memberId));
- if(!member)return alert('হাদিয়াদাতার নাম তালিকায় পাওয়া যায়নি।');
- if(![...sel.options].some(o=>o.value===String(memberId)))renderMembers();
- sel.value=String(memberId);
- const box=sel.closest('.card');
- box.scrollIntoView({behavior:'smooth',block:'center'});
- sel.focus({preventScroll:true});
- let msg=$('selectedPayerMessage');
- if(!msg){msg=document.createElement('div');msg.id='selectedPayerMessage';msg.className='status';box.querySelector('.row').insertAdjacentElement('beforebegin',msg);}
- msg.textContent='নির্বাচিত হাদিয়াদাতা: '+member.name+' • মাসিক হাদিয়া '+money(member.due);
-}
-$('searchDueThrough').value=monthNow();$('searchDueThrough').addEventListener('change',()=>{renderHadiaSearch()});$('searchHadiaMemberBtn').addEventListener('click',renderHadiaSearch);$('showAllHadiaMembersBtn').addEventListener('click',()=>{$('hadiaSearchMember').value='';renderHadiaSearch()});
-$('payBtn').onclick=()=>{const member=data.members.find(m=>m.id===$('payMember').value),month=$('payMonth').value,amount=Number($('payAmount').value);if(!member)return alert('আগে হাদিয়াদাতা যোগ করুন');if(!month||!(amount>0))return alert('মাস ও সঠিক টাকা দিন');const p={id:String(Date.now()),memberId:member.id,month,amount,date:$('payDate').value||today()};data.payments.push(p);data.transactions.push({id:'hadia-'+p.id,type:'income',date:p.date,amount,category:'মাসিক হাদিয়া',account:'cash',refno:(data.settings.prefix||'MZ')+'-'+String(data.nextReceipt++).padStart(5,'0'),person:member.name+' ('+monthLabel(month)+')',note:'মাসিক হাদিয়া'});$('payAmount').value='';save();alert('হাদিয়া জমা সংরক্ষণ হয়েছে')};function editMember(id){const m=data.members.find(x=>String(x.id)===String(id));if(!m)return alert('হাদিয়াদাতার তথ্য পাওয়া যায়নি।');const name=prompt('হাদিয়াদাতার নাম সম্পাদনা করুন:',m.name||'');if(name===null)return;const phone=prompt('মোবাইল নম্বর সম্পাদনা করুন:',m.phone||'');if(phone===null)return;const dueText=prompt('মাসিক নির্ধারিত হাদিয়া (টাকা):',String(m.due??0));if(dueText===null)return;const due=Number(dueText);if(!name.trim())return alert('নাম খালি রাখা যাবে না।');if(dueText.trim()===''||!Number.isFinite(due)||due<0)return alert('সঠিক মাসিক হাদিয়ার পরিমাণ দিন।');const start=prompt('হিসাব শুরুর মাস (YYYY-MM):',m.start||'2024-10');if(start===null)return;if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(start))return alert('শুরুর মাস YYYY-MM ফরম্যাটে দিন, যেমন 2024-10।');m.name=name.trim();m.phone=phone.trim();m.due=due;m.start=start;save();renderHadiaSearch();alert('হাদিয়াদাতার তথ্য সম্পাদনা করে সংরক্ষণ করা হয়েছে। পুরোনো জমার রেকর্ডের ID অপরিবর্তিত আছে।')}function deleteMember(id){if(!confirm('এই হাদিয়াদাতাকে তালিকা থেকে মুছবেন? তার পুরোনো জমার রেকর্ড থাকবে।'))return;data.members=data.members.filter(m=>m.id!==id);save()}
-function renderFunds(){
- const cats=['দান','মাসিক হাদিয়া','নির্মাণ তহবিল','বিশেষ তহবিল','ইমাম বেতন','মুয়াজ্জিন বেতন','অন্যান্য বেতন','বিদ্যুৎ/পানি বিল','মেরামত','পরিচ্ছন্নতা','অন্যান্য'];
- const fundCards=cats.map(c=>{const inc=txSum('income',t=>t.category===c),out=txSum('expense',t=>t.category===c);return `<button type="button" class="card fund-card" data-fund-detail="${esc(c)}" style="text-align:left;width:100%;font:inherit;color:inherit;cursor:pointer"><div class="k">${esc(c)}</div><div class="v">${money(inc-out)}</div><div class="hint">আয় ${money(inc)} • ব্যয় ${money(out)}</div><div class="hint" style="margin-top:5px">বিস্তারিত দেখুন →</div></button>`}).join('');$('fundSummary').innerHTML=fundCards;$('homeFundGrid').innerHTML=fundCards;
- const b=balances();$('accountSummary').innerHTML=[['নগদ ব্যালেন্স (সকল লেনদেন)',b.cash],['ব্যাংক ব্যালেন্স (PIN-সুরক্ষিত, স্থির)',b.bank]].map(([k,v])=>`<div class="card"><div class="k">${k}</div><div class="v">${money(v)}</div></div>`).join('');renderBankHistory()
-}
-function fundRowsTable(items,category){
- if(!items.length)return '<div class="empty">এই খাতে এখনো কোনো হিসাব সংরক্ষণ করা হয়নি।</div>';
- const isHadia=category==='মাসিক হাদিয়া',isDonation=category==='দান';
- const headers=isDonation?['তারিখ','রসিদ নম্বর','দাতার নাম','বিবরণ','টাকা','রসিদ']:isHadia?['জমার তারিখ','হাদিয়াদাতা','জমার মাস','রসিদ নম্বর','টাকা','রসিদ']:['তারিখ','ধরন','বিবরণ/গ্রহীতা','ভাউচার/রসিদ','টাকা','রসিদ'];
- return `<div class="tablewrap"><table><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${items.map(t=>{const m=isHadia?(t.person||'').match(/^(.*?)\s*\((\d{4}-\d{2})\)$/):null;let cells=isDonation?[t.date||'—',t.refno||'—',t.person||'নাম উল্লেখ নেই',t.note||'—',money(t.amount)]:isHadia?[t.date||'—',m?m[1]:t.person||'—',m?monthLabel(m[2]):'—',t.refno||'—',money(t.amount)]:[t.date||'—',t.type==='income'?'জমা/আয়':'খরচ/ব্যয়',t.person||t.note||'—',t.refno||'—',money(t.amount)];return `<tr>${cells.map((v,i)=>`<td class="${i===cells.length-1?'num':''}">${esc(v)}</td>`).join('')}<td class="no-print"><button class="btn secondary small" type="button" onclick="printReceipt('${String(t.id).replace(/'/g,"\\'")}')">রসিদ প্রিন্ট</button></td></tr>`}).join('')}</tbody></table></div>`
-}
-function salaryDetailHTML(category,month='all'){
- const cats=['ইমাম বেতন','মুয়াজ্জিন বেতন','অন্যান্য বেতন'];
- const chosen=data.transactions.filter(t=>t.type==='expense'&&cats.includes(t.category)&&(category==='all'||t.category===category)&&((month==='all')||(t.salaryMonth||String(t.date||'').slice(0,7))===month));
- const groups={};
- chosen.forEach(t=>{const name=t.person||'নাম উল্লেখ নেই',m=t.salaryMonth||String(t.date||'').slice(0,7),key=name+'|'+m;(groups[key]??={name,month:m,paid:0,rows:[]});groups[key].paid+=Number(t.amount||0);groups[key].rows.push(t)});
- const rows=Object.values(groups).sort((a,b)=>b.month.localeCompare(a.month)||a.name.localeCompare(b.name,'bn')),rates=data.salaryRates||{};
- if(!rows.length)return '<div class="empty">নির্বাচিত সময়ে কোনো বেতন প্রদান রেকর্ড নেই।</div>';
- return `<div class="tablewrap"><table><thead><tr><th>কর্মীর নাম</th><th>বেতনের মাস</th><th>নির্ধারিত বেতন</th><th>প্রদত্ত বেতন</th><th>বকেয়া</th><th class="no-print">রসিদ</th></tr></thead><tbody>${rows.map(r=>{const due=Number(rates[r.name]||0),arrears=Math.max(0,due-r.paid);return `<tr><td>${esc(r.name)}</td><td>${esc(monthLabel(r.month))}</td><td class="num">${due?money(due):'নির্ধারণ হয়নি'}</td><td class="num">${money(r.paid)}</td><td class="num"><b>${due?money(arrears):'—'}</b></td><td class="no-print">${r.rows.map(t=>`<button class="btn secondary small" onclick="printReceipt('${String(t.id).replace(/'/g,"\\'")}')">প্রিন্ট</button>`).join(' ')}</td></tr>`}).join('')}</tbody></table></div><p class="hint">বকেয়া = কর্মীর নির্ধারিত মাসিক বেতন − ওই মাসে প্রদত্ত মোট বেতন। নির্ধারিত বেতন সেট না থাকলে বকেয়া গণনা করা হবে না।</p>`;
-}
-function showFundDetail(category){
- const modal=$('summaryDetail'),title=$('summaryDetailTitle'),body=$('summaryDetailContent'),cats=['ইমাম বেতন','মুয়াজ্জিন বেতন','অন্যান্য বেতন'];
- const isSalary=cats.includes(category);title.textContent=category+' — বিস্তারিত হিসাব';
- let items=data.transactions.filter(t=>t.category===category).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
- const inc=items.filter(t=>t.type==='income').reduce((a,t)=>a+Number(t.amount||0),0),out=items.filter(t=>t.type==='expense').reduce((a,t)=>a+Number(t.amount||0),0);
- let controls='';
- if(isSalary){
-  controls=`<div class="no-print" style="margin:10px 0 12px"><button class="btn secondary" type="button" id="setSalaryRate">কর্মীর মাসিক নির্ধারিত বেতন সেট করুন</button></div>`;
- }
- const detailTitle=category==='দান'?'দাতার নাম, রসিদ নম্বর, তারিখ ও টাকার বিবরণ':category==='মাসিক হাদিয়া'?'হাদিয়াদাতার নাম, জমার মাস ও টাকার বিবরণ':['নির্মাণ তহবিল','বিশেষ তহবিল'].includes(category)?'তহবিলের জমা, খরচ ও বর্তমান স্থিতি':isSalary?'কর্মীর নাম, বেতনের মাস, প্রদত্ত ও বকেয়া বেতন':'সংশ্লিষ্ট বিল ও লেনদেনের বিবরণ';
- body.innerHTML=`<div class="detail-total">বর্তমান স্থিতি: ${money(inc-out)}</div><div class="grid" style="margin-bottom:12px"><div class="card"><div class="k">মোট জমা/আয়</div><div class="v">${money(inc)}</div></div><div class="card"><div class="k">মোট খরচ/ব্যয়</div><div class="v">${money(out)}</div></div></div><h3>${detailTitle}</h3>${controls}<div id="fundDetailRows">${isSalary?salaryDetailHTML(category):fundRowsTable(items,category)}</div>`;
- if(isSalary){
-  $('setSalaryRate').onclick=()=>{const name=prompt('কর্মীর সঠিক নাম লিখুন (বেতন লেনদেনের নামের সঙ্গে মিলতে হবে):');if(name===null||!name.trim())return;const old=Number(data.salaryRates?.[name.trim()]||0),raw=prompt('এই কর্মীর মাসিক নির্ধারিত বেতন (টাকা):',String(old||''));if(raw===null)return;const amount=Number(raw.replace(/,/g,''));if(!Number.isFinite(amount)||amount<0)return alert('সঠিক বেতনের পরিমাণ দিন।');data.salaryRates=data.salaryRates||{};data.salaryRates[name.trim()]=amount;save();showFundDetail(category)};
- }
- modal.classList.add('open');document.body.style.overflow='hidden';
-}
-document.addEventListener('click',e=>{const card=e.target.closest('[data-fund-detail]');if(card)showFundDetail(card.dataset.fundDetail)});
-function runReport(){const m=$('reportMonth').value||monthNow(),ts=data.transactions.filter(t=>t.date.startsWith(m)),inc=ts.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),out=ts.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);const imam=ts.filter(t=>t.type==='expense'&&t.category==='ইমাম বেতন').reduce((a,t)=>a+t.amount,0),muezzin=ts.filter(t=>t.type==='expense'&&t.category==='মুয়াজ্জিন বেতন').reduce((a,t)=>a+t.amount,0);$('reportResult').innerHTML=`<h3>${monthLabel(m)}</h3><div class="grid"><div class="card"><div class="k">মোট আয়</div><div class="v">${money(inc)}</div></div><div class="card"><div class="k">মোট ব্যয়</div><div class="v">${money(out)}</div></div><div class="card"><div class="k">নিট</div><div class="v">${money(inc-out)}</div></div></div><h3>ইমাম ও মুয়াজ্জিনের মাসিক বেতন</h3><div class="grid"><div class="card"><div class="k">ইমাম বেতন</div><div class="v">${money(imam)}</div></div><div class="card"><div class="k">মুয়াজ্জিন বেতন</div><div class="v">${money(muezzin)}</div></div><div class="card"><div class="k">মোট বেতন</div><div class="v">${money(imam+muezzin)}</div></div></div><h3>খাতভিত্তিক বিবরণ</h3>${txTable(ts)}`}
-$('runReport').onclick=runReport;function populateYears(){const years=new Set([String(new Date().getFullYear()),...data.transactions.map(t=>t.date.slice(0,4))]);$('reportYear').innerHTML=[...years].sort().reverse().map(y=>`<option>${y}</option>`).join('')}
-function runYear(){const y=$('reportYear').value||String(new Date().getFullYear());let rows=[];for(let i=1;i<=12;i++){const m=y+'-'+String(i).padStart(2,'0'),ts=data.transactions.filter(t=>t.date.startsWith(m)),inc=ts.filter(t=>t.type==='income').reduce((a,t)=>a+t.amount,0),out=ts.filter(t=>t.type==='expense').reduce((a,t)=>a+t.amount,0);rows.push({m,inc,out})}$('yearResult').innerHTML=`<h3>${y} সালের সারসংক্ষেপ</h3><div class="tablewrap"><table><thead><tr><th>মাস</th><th>আয়</th><th>ব্যয়</th><th>নিট</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${monthLabel(r.m)}</td><td class="num">${money(r.inc)}</td><td class="num">${money(r.out)}</td><td class="num">${money(r.inc-r.out)}</td></tr>`).join('')}</tbody><tfoot><tr><th>সর্বমোট</th><th>${money(rows.reduce((a,r)=>a+r.inc,0))}</th><th>${money(rows.reduce((a,r)=>a+r.out,0))}</th><th>${money(rows.reduce((a,r)=>a+r.inc-r.out,0))}</th></tr></tfoot></table></div>`}
-$('runYear').onclick=runYear;$('csvBtn').onclick=()=>{const rows=[['তারিখ','ধরন','খাত','নাম/বিবরণ','পরিমাণ','অ্যাকাউন্ট','রসিদ'],...data.transactions.map(t=>[t.date,t.type==='income'?'আয়':'ব্যয়',t.category,t.person,t.amount,t.account==='bank'?'ব্যাংক':'নগদ',t.refno])];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');download(csv,'mosque-transactions-'+today()+'.csv','text/csv;charset=utf-8')};
-function download(content,name,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}$('exportBtn').onclick=()=>download(JSON.stringify({...data,exportedAt:new Date().toISOString()},null,2),'mosque-backup-'+today()+'.json','application/json');$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const incoming=JSON.parse(await f.text());if(incoming.version!==1||!Array.isArray(incoming.transactions)||!Array.isArray(incoming.members))throw new Error('ফাইলটি এই অ্যাপের বৈধ ব্যাকআপ নয়');if(!confirm('বর্তমান ডেটা প্রতিস্থাপন করে ব্যাকআপ ফিরিয়ে আনবেন? আগে বর্তমান ডেটার একটি ব্যাকআপ ডাউনলোড করুন।'))return;data={...data,...incoming,settings:{...data.settings,...incoming.settings},bankHistory:Array.isArray(incoming.bankHistory)?incoming.bankHistory:(data.bankHistory||[]) };save();alert('ব্যাকআপ ফিরিয়ে আনা হয়েছে')}catch(err){alert('ব্যাকআপ ফিরিয়ে আনা যায়নি: '+err.message)}finally{e.target.value=''}};
-async function renderBackupHistory(){try{const db=await openDB(),all=await new Promise((res,rej)=>{const r=db.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});$('backupStatus').textContent='লোকাল স্বয়ংক্রিয় ব্যাকআপ চালু • '+all.length+'টি কপি';$('backupStatus').className='status';$('backupHistory').innerHTML=all.length?`<table><thead><tr><th>সময়</th><th>কাজ</th></tr></thead><tbody>${all.sort((a,b)=>b.id-a.id).slice(0,10).map(x=>`<tr><td>${new Date(x.at).toLocaleString('bn-BD')}</td><td><button class="btn secondary small" onclick="restoreSnapshot(${x.id})">এই কপি ফিরিয়ে আনুন</button></td></tr>`).join('')}</tbody></table>`:'<div class="empty">এখনো লোকাল ব্যাকআপ তৈরি হয়নি। কিছু তথ্য সংরক্ষণ করুন।</div>'}catch(e){$('backupStatus').textContent='লোকাল ব্যাকআপ উপলভ্য নয়; JSON ফাইল ডাউনলোড করুন।';$('backupStatus').className='status warn'}}
-async function restoreSnapshot(id){if(!confirm('এই সময়ের ব্যাকআপ দিয়ে বর্তমান ডেটা প্রতিস্থাপন করবেন?'))return;try{const db=await openDB(),s=await new Promise((res,rej)=>{const r=db.transaction(STORE).objectStore(STORE).get(id);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});if(!s)throw Error('ব্যাকআপ পাওয়া যায়নি');data=s.data;localStorage.setItem(DBKEY,JSON.stringify(data));render();alert('লোকাল ব্যাকআপ ফিরিয়ে আনা হয়েছে')}catch(e){alert(e.message)}}
-const CLOUD_CFG_KEY='masjidHisabCloudConfigV1';let cloudTimer=null,cloudRequestId=0;
-function getCloudConfig(){try{return JSON.parse(localStorage.getItem(CLOUD_CFG_KEY)||'{"url":"","key":"","auto":false}')}catch(e){return {url:'',key:'',auto:false}}}
-function setCloudStatus(msg,warn=false){const el=$('cloudStatus');if(el){el.textContent=msg;el.className='status'+(warn?' warn':'')}}
-function loadCloudConfig(){const c=getCloudConfig();$('cloudUrl').value=c.url||'';$('cloudKey').value=c.key||'';$('cloudAuto').checked=!!c.auto;setCloudStatus(c.url&&c.key?'সংযোগের তথ্য সংরক্ষিত। ব্যাকআপ পাঠানো/ফিরিয়ে আনার জন্য প্রস্তুত।':'Google Sheets সংযোগ সেটআপ করুন।',!(c.url&&c.key))}
-$('saveCloudConfig').onclick=()=>{const url=$('cloudUrl').value.trim(),key=$('cloudKey').value.trim();if(url&&!/^https:\/\/script\.google\.com\/macros\/s\//.test(url))return alert('Apps Script Web App-এর সঠিক https://script.google.com/macros/s/... URL দিন।');if((url&&!key)||(!url&&key))return alert('URL ও গোপন কী—দুটিই পূরণ করুন।');const c={url,key,auto:$('cloudAuto').checked};localStorage.setItem(CLOUD_CFG_KEY,JSON.stringify(c));setCloudStatus(c.url?'সংযোগ সেটিংস এই ডিভাইসে সংরক্ষিত।':'ক্লাউড সংযোগ এখনো সেট করা হয়নি।',!c.url);alert('ক্লাউড সেটিংস সংরক্ষিত হয়েছে')};
-$('cloudAuto').onchange=()=>{const c=getCloudConfig();c.auto=$('cloudAuto').checked;localStorage.setItem(CLOUD_CFG_KEY,JSON.stringify(c));if(c.auto&&c.url&&c.key)scheduleCloudBackup()};
-function scheduleCloudBackup(){const c=getCloudConfig();if(!c.auto||!c.url||!c.key)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(()=>sendCloudBackup(true),2500)}
-function sendCloudBackup(silent=false){const c=getCloudConfig();if(!c.url||!c.key){if(!silent)alert('আগে Apps Script URL ও গোপন কী সেট করুন।');return}const frameName='masjidCloudFrame'+Date.now(),frame=document.createElement('iframe');frame.name=frameName;frame.style.display='none';document.body.appendChild(frame);const form=document.createElement('form');form.method='POST';form.action=c.url;form.target=frameName;form.style.display='none';const req=++cloudRequestId;[['action','save'],['key',c.key],['requestId',String(req)],['payload',JSON.stringify({...data,exportedAt:new Date().toISOString()})]].forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)});const listener=e=>{if(e.data&&e.data.source==='masjid-hisab-cloud'&&String(e.data.requestId)===String(req)){window.removeEventListener('message',listener);form.remove();frame.remove();if(e.data.ok){setCloudStatus('ক্লাউড ব্যাকআপ সফল • '+new Date().toLocaleString('bn-BD'));if(!silent)alert('Google Sheets-এ ক্লাউড ব্যাকআপ সফল হয়েছে।')}else{setCloudStatus('ক্লাউড ব্যাকআপ ব্যর্থ: '+(e.data.message||'ত্রুটি'),true);if(!silent)alert('ক্লাউড ব্যাকআপ ব্যর্থ: '+(e.data.message||'ত্রুটি'))}}};window.addEventListener('message',listener);document.body.appendChild(form);form.submit();setCloudStatus(silent?'স্বয়ংক্রিয় ক্লাউড ব্যাকআপ পাঠানো হচ্ছে…':'ক্লাউড ব্যাকআপ পাঠানো হচ্ছে…');setTimeout(()=>{window.removeEventListener('message',listener);if(form.isConnected){form.remove();frame.remove();setCloudStatus('সার্ভারের উত্তর পাওয়া যায়নি। URL/Deploy/ইন্টারনেট যাচাই করুন; Google Sheet-এ ব্যাকআপ হয়েছে কি না দেখুন।',true)}},30000)}
-$('cloudBackupNow').onclick=()=>sendCloudBackup(false);
-$('cloudRestore').onclick=()=>{const c=getCloudConfig();if(!c.url||!c.key)return alert('আগে Apps Script URL ও গোপন কী সেট করুন।');if(!confirm('সর্বশেষ ক্লাউড ব্যাকআপ দিয়ে এই ডিভাইসের বর্তমান হিসাব প্রতিস্থাপন করবেন? আগে বর্তমান JSON ব্যাকআপ ডাউনলোড করুন।'))return;const frameName='masjidRestoreFrame'+Date.now(),frame=document.createElement('iframe');frame.name=frameName;frame.style.display='none';document.body.appendChild(frame);const form=document.createElement('form');form.method='POST';form.action=c.url;form.target=frameName;form.style.display='none';const req=++cloudRequestId;[['action','restore'],['key',c.key],['requestId',String(req)]].forEach(([name,value])=>{const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.appendChild(input)});const listener=e=>{if(e.data&&e.data.source==='masjid-hisab-cloud'&&String(e.data.requestId)===String(req)){window.removeEventListener('message',listener);form.remove();frame.remove();try{if(!e.data.ok)throw Error(e.data.message||'ব্যাকআপ পাওয়া যায়নি');const incoming=e.data.data;if(!incoming||incoming.version!==1||!Array.isArray(incoming.transactions)||!Array.isArray(incoming.members))throw Error('ক্লাউডে বৈধ হিসাব ব্যাকআপ নেই');data={...data,...incoming,settings:{...data.settings,...incoming.settings},bankHistory:Array.isArray(incoming.bankHistory)?incoming.bankHistory:(data.bankHistory||[]) };localStorage.setItem(DBKEY,JSON.stringify(data));render();renderBackupHistory();setCloudStatus('ক্লাউড ব্যাকআপ ফিরিয়ে আনা হয়েছে • '+new Date().toLocaleString('bn-BD'));alert('Google Sheets-এর সর্বশেষ ব্যাকআপ ফিরিয়ে আনা হয়েছে')}catch(err){setCloudStatus('ক্লাউড রিস্টোর ব্যর্থ: '+err.message,true);alert('ক্লাউড রিস্টোর ব্যর্থ: '+err.message)}}};window.addEventListener('message',listener);document.body.appendChild(form);form.submit();setCloudStatus('Google Sheets থেকে ব্যাকআপ আনা হচ্ছে…');setTimeout(()=>{window.removeEventListener('message',listener);if(form.isConnected){form.remove();frame.remove();setCloudStatus('সার্ভারের উত্তর পাওয়া যায়নি। URL/Deploy/ইন্টারনেট যাচাই করুন।',true)}},30000)};;
-function fillSettings(){for(const [id,key] of [['mosqueName','name'],['mosqueAddress','address'],['mosquePhone','phone'],['receiptPrefix','prefix'],['openingCash','openingCash'],['openingBank','openingBank']])if($(id)&&document.activeElement!==$(id))$(id).value=data.settings[key]??''}
-$('saveSettings').onclick=()=>{const oldBank=data.settings.bankBalance;data.settings={...data.settings,name:$('mosqueName').value.trim(),address:$('mosqueAddress').value.trim(),phone:$('mosquePhone').value.trim(),prefix:$('receiptPrefix').value.trim()||'MZ',openingCash:Number($('openingCash').value)||0,bankBalance:oldBank===undefined||oldBank===null?Number(data.settings.openingBank||0):oldBank};save();alert('সেটিংস সংরক্ষিত হয়েছে। ব্যাংক ব্যালেন্স আলাদা ও অপরিবর্তিত রাখা হয়েছে।')};$('printReceiptList').onclick=openReceiptPicker;
-$('closeReceiptPicker').onclick=()=> $('receiptPicker').classList.remove('open');
-$('clearReceiptSelection').onclick=()=>{document.querySelectorAll('#receiptPickerList input[type=checkbox]').forEach(x=>x.checked=false);updateReceiptSelectionCount()};
-function openReceiptPicker(){
- const items=[...data.transactions].sort((a,b)=>(b.date||'').localeCompare(a.date||'')||String(b.id).localeCompare(String(a.id)));
- $('receiptPickerList').innerHTML=items.length?items.map(t=>`<label class="receipt-choice"><input type="checkbox" value="${esc(t.id)}"><span><b>${esc(t.person||'নাম উল্লেখ নেই')}</b><small>রসিদ: ${esc(t.refno||'—')} · ${esc(t.date||'—')} · ${esc(t.category||'')} · ${money(t.amount)}</small></span></label>`).join(''):'<div class="empty">এখনো কোনো রসিদ/লেনদেন নেই।</div>';
- $('receiptPicker').classList.add('open');updateReceiptSelectionCount();
-}
-function updateReceiptSelectionCount(){
- const checks=[...document.querySelectorAll('#receiptPickerList input[type=checkbox]')];
- const selected=checks.filter(x=>x.checked);
- checks.forEach(x=>{x.disabled=!x.checked&&selected.length>=3});
- $('receiptSelectionCount').textContent=`${selected.length} / ৩ নির্বাচিত`;
-}
-$('receiptPickerList').addEventListener('change',updateReceiptSelectionCount);
-$('printSelectedReceipts').onclick=()=>{
- const ids=[...document.querySelectorAll('#receiptPickerList input[type=checkbox]:checked')].map(x=>x.value);
- if(!ids.length)return alert('প্রিন্ট করার জন্য অন্তত ১টি রসিদ নির্বাচন করুন।');
- if(ids.length>3)return alert('এক পাতায় সর্বোচ্চ ৩টি রসিদ নির্বাচন করা যাবে।');
- const chosen=ids.map(id=>data.transactions.find(t=>String(t.id)===id)).filter(Boolean);
- if(!chosen.length)return alert('নির্বাচিত রসিদ পাওয়া যায়নি।');
- printReceiptBatch(chosen);$('receiptPicker').classList.remove('open');
-};
-// ব্যাংক ব্যালেন্স আলাদা PIN-সুরক্ষিত স্থির অঙ্ক; সাধারণ লেনদেন এতে প্রভাব ফেলে না।
-const BANK_PIN_KEY='masjidHisabBankPinV1';
-async function bankPinHash(pin){const bytes=new TextEncoder().encode('masjid-hisab-bank-pin:'+pin);const hash=await crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(hash)].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function renderBankHistory(){const el=$('bankHistory');if(!el)return;const rows=[...(data.bankHistory||[])].sort((a,b)=>(b.at||'').localeCompare(a.at||'')).slice(0,10);el.innerHTML='<h3>ব্যাংক ব্যালেন্স পরিবর্তনের ইতিহাস</h3>'+(rows.length?`<div class="tablewrap"><table><thead><tr><th>তারিখ ও সময়</th><th>আগের ব্যালেন্স</th><th>নতুন ব্যালেন্স</th><th>কারণ</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(new Date(x.at).toLocaleString('bn-BD'))}</td><td class="num">${money(x.from)}</td><td class="num">${money(x.to)}</td><td>${esc(x.note||'—')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="hint">এখনো ব্যাংক ব্যালেন্স পরিবর্তন করা হয়নি।</p>')}
-async function verifyOrCreateBankPin(){let saved=localStorage.getItem(BANK_PIN_KEY);if(!saved){const p=prompt('প্রথমবারের জন্য নতুন ৪ সংখ্যার ব্যাংক PIN তৈরি করুন:');if(p===null)return false;if(!/^\d{4}$/.test(p)){alert('PIN অবশ্যই ৪ সংখ্যার হতে হবে।');return false}const c=prompt('ব্যাংক PIN আবার লিখুন:');if(c!==p){alert('দুইবারের PIN মেলেনি।');return false}localStorage.setItem(BANK_PIN_KEY,await bankPinHash(p));return true}const p=prompt('ব্যাংক ব্যালেন্স পরিবর্তনের ৪ সংখ্যার PIN দিন:');if(p===null)return false;if(!/^\d{4}$/.test(p)||await bankPinHash(p)!==saved){alert('ব্যাংক PIN সঠিক নয়।');return false}return true}
-$('manageBankBalance').onclick=async()=>{if(!await verifyOrCreateBankPin())return;const current=Number(data.settings.bankBalance??data.settings.openingBank??0);const raw=prompt('নতুন ব্যাংক ব্যালেন্স (টাকা) লিখুন:',String(current));if(raw===null)return;const amount=Number(raw.replace(/,/g,''));if(!Number.isFinite(amount)||amount<0){alert('সঠিক শূন্য বা তার বেশি টাকা লিখুন।');return}const note=prompt('পরিবর্তনের কারণ/বিবরণ লিখুন:','ব্যাংক ব্যালেন্স সংশোধন');if(note===null)return;data.bankHistory=data.bankHistory||[];data.bankHistory.push({at:new Date().toISOString(),from:current,to:amount,note:note.trim()});data.settings.bankBalance=amount;save();alert('ব্যাংক ব্যালেন্স PIN যাচাই করে পরিবর্তন করা হয়েছে।')};
-$('changeBankPin').onclick=async()=>{const saved=localStorage.getItem(BANK_PIN_KEY);if(!saved)return alert('আগে “PIN দিয়ে ব্যাংক ব্যালেন্স পরিবর্তন” থেকে ব্যাংক PIN তৈরি করুন।');const old=prompt('বর্তমান ব্যাংক PIN দিন:');if(old===null)return;if(await bankPinHash(old)!==saved)return alert('বর্তমান PIN সঠিক নয়।');const p=prompt('নতুন ৪ সংখ্যার ব্যাংক PIN দিন:');if(p===null)return;if(!/^\d{4}$/.test(p))return alert('নতুন PIN অবশ্যই ৪ সংখ্যার হতে হবে।');const c=prompt('নতুন PIN আবার লিখুন:');if(c!==p)return alert('দুইবারের PIN মেলেনি।');localStorage.setItem(BANK_PIN_KEY,await bankPinHash(p));alert('ব্যাংক PIN পরিবর্তন হয়েছে।')};
-function updateNetworkStatus(){const el=$('deviceNetworkStatus');const online=navigator.onLine;if(el){el.textContent=online?'🟢 ডিভাইস অনলাইন — ইন্টারনেট সংযোগ আছে':'🔴 ডিভাইস অফলাইন — ইন্টারনেট সংযোগ নেই';el.className='status'+(online?'':' warn')}const badge=$('homeOnlineLabel');if(badge)badge.textContent=online?'🟢 অনলাইন':'🔴 অফলাইন';const hint=$('homeBackupHint');if(hint)hint.textContent=online?'ইন্টারনেট সংযোগ আছে • ব্যাকআপ নিতে পারবেন':'ইন্টারনেট নেই • লোকাল হিসাব চালু আছে'}window.addEventListener('online',updateNetworkStatus);window.addEventListener('offline',updateNetworkStatus);updateNetworkStatus();
-load();render();renderBackupHistory();loadCloudConfig();$('runYear').click();if('serviceWorker'in navigator&&location.protocol.startsWith('http'))window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(console.warn));
-</script><style>
-#pinGate{position:fixed;inset:0;z-index:999999;background:#f4f7fb;color:#142033;display:flex;align-items:center;justify-content:center;padding:18px;font-family:system-ui,sans-serif}
-#pinGate .pin-card{width:min(100%,420px);background:#fff;border:1px solid #dce4ee;border-radius:20px;padding:24px;box-shadow:0 18px 55px #10204020}
-#pinGate h2{margin:0 0 8px;text-align:center}#pinGate p{line-height:1.55;color:#526174;font-size:14px}
-#pinGate label{display:block;font-weight:700;margin:14px 0 6px}#pinGate input{display:block!important;width:100%;box-sizing:border-box;padding:12px;border:1px solid #b9c6d8;border-radius:10px;font-size:18px;letter-spacing:4px;text-align:center;background:#fff;color:#142033}
-#pinGate button{display:block!important;width:100%;padding:12px;border:0;border-radius:10px;background:#176b50;color:white;font-weight:700;font-size:15px;margin-top:12px;cursor:pointer}#pinGate button.alt{background:#eaf0f6;color:#142033}#pinGate .pin-error{color:#b42318;min-height:20px;font-weight:600;font-size:13px}#pinGate .pin-code{padding:12px;border-radius:10px;background:#edf7ef;font-weight:800;text-align:center;letter-spacing:2px;overflow-wrap:anywhere}
-</style>
-<div id="pinGate" role="dialog" aria-modal="true" aria-labelledby="pinTitle"><div class="pin-card"><h2 id="pinTitle">🕌 মসজিদ হিসাব</h2><p id="pinIntro" style="text-align:center">আপনার ৪ সংখ্যার PIN দিন</p><div id="pinFields"></div><div id="pinError" class="pin-error" role="status"></div><div id="pinActions"></div></div></div>
-<script>
-(()=>{
- const PIN_KEY='masjidHisabPinV1', RECOVERY_PIN_KEY='masjidHisabSecretRecoveryPinV1';
- const gate=document.getElementById('pinGate'), fields=document.getElementById('pinFields'), actions=document.getElementById('pinActions'), intro=document.getElementById('pinIntro'), error=document.getElementById('pinError');
- const enc=new TextEncoder();
- async function digest(s){try{const b=await crypto.subtle.digest('SHA-256',enc.encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return 'fallback-'+(h>>>0).toString(16)}}
- function field(id,label,type='password',max=4){return `<label for="${id}">${label}</label><input id="${id}" type="${type}" inputmode="numeric" maxlength="${max}" autocomplete="off" ${type==='password'?'pattern="[0-9]*"':''}>`}
- function button(label,fn,alt=false){const b=document.createElement('button');b.type='button';b.textContent=label;if(alt)b.className='alt';b.onclick=fn;actions.appendChild(b)}
- function showError(t){error.textContent=t||''}
- function show(){gate.style.display='flex'}
- function unlock(){gate.style.display='none'}
- function setRecoveryPin(after,mainPin=''){intro.textContent='একটি গোপন ৪ সংখ্যার পুনরুদ্ধার PIN তৈরি করুন। দুই ঘরে একই PIN লিখুন।';fields.innerHTML=field('secretRecovery','গোপন পুনরুদ্ধার PIN (৪ সংখ্যা)')+field('secretRecoveryConfirm','পুনরুদ্ধার PIN আবার লিখুন (৪ সংখ্যা)');actions.innerHTML='';showError('');button('পুনরুদ্ধার PIN সংরক্ষণ',async()=>{const r=document.getElementById('secretRecovery').value,c=document.getElementById('secretRecoveryConfirm').value;if(!/^\d{4}$/.test(r)){showError('পুনরুদ্ধার PIN অবশ্যই ৪টি সংখ্যা হতে হবে।');return}if(r===mainPin){showError('গোপন পুনরুদ্ধার PIN মূল PIN থেকে আলাদা রাখুন।');return}if(r!==c){showError('দুইবারের পুনরুদ্ধার PIN মিলেনি।');return}localStorage.setItem(RECOVERY_PIN_KEY,await digest('masjid-hisab-secret-recovery:'+r));after();});}
- function setup(){show();intro.textContent='প্রথমবার ব্যবহারের জন্য ৪ সংখ্যার PIN তৈরি করুন।';fields.innerHTML=field('pinNew','নতুন ৪ সংখ্যার PIN')+field('pinConfirm','PIN আবার লিখুন');actions.innerHTML='';showError('');button('PIN সেট করুন',async()=>{const p=document.getElementById('pinNew').value,c=document.getElementById('pinConfirm').value;if(!/^\d{4}$/.test(p)){showError('PIN অবশ্যই ৪টি সংখ্যা হতে হবে।');return}if(p!==c){showError('দুইবারের PIN মিলেনি।');return}localStorage.setItem(PIN_KEY,await digest('masjid-hisab:'+p));setRecoveryPin(unlock,p);});}
- function login(){show();intro.textContent='অ্যাপ খুলতে আপনার ৪ সংখ্যার PIN দিন।';fields.innerHTML=field('pinEntry','৪ সংখ্যার PIN');actions.innerHTML='';showError('');button('লগইন',async()=>{const p=document.getElementById('pinEntry').value;if(!/^\d{4}$/.test(p)){showError('৪ সংখ্যার PIN দিন।');return}if(await digest('masjid-hisab:'+p)===localStorage.getItem(PIN_KEY)){if(!localStorage.getItem(RECOVERY_PIN_KEY)){setRecoveryPin(unlock,p)}else{unlock()}}else{showError('PIN সঠিক নয়। আবার চেষ্টা করুন।');document.getElementById('pinEntry').value='';document.getElementById('pinEntry').focus()}});button('PIN ভুলে গেছি — গোপন পুনরুদ্ধার PIN',recover,true);setTimeout(()=>document.getElementById('pinEntry')?.focus(),50)}
- function recover(){intro.textContent='গোপন পুনরুদ্ধার PIN দিয়ে নতুন লগইন PIN সেট করুন';fields.innerHTML=field('secretRecoveryEntry','গোপন পুনরুদ্ধার PIN (৪ সংখ্যা)')+field('pinReset','নতুন ৪ সংখ্যার PIN')+field('pinReset2','নতুন PIN আবার লিখুন');actions.innerHTML='';showError('');button('PIN পুনরুদ্ধার করুন',async()=>{const r=document.getElementById('secretRecoveryEntry').value;const saved=localStorage.getItem(RECOVERY_PIN_KEY);if(!/^\d{4}$/.test(r)||!saved||await digest('masjid-hisab-secret-recovery:'+r)!==saved){showError('গোপন পুনরুদ্ধার PIN সঠিক নয়।');return}const p=document.getElementById('pinReset').value,c=document.getElementById('pinReset2').value;if(!/^\d{4}$/.test(p)){showError('নতুন PIN ৪টি সংখ্যা হতে হবে।');return}if(p!==c){showError('দুইবারের PIN মিলেনি।');return}localStorage.setItem(PIN_KEY,await digest('masjid-hisab:'+p));intro.textContent='লগইন PIN পরিবর্তন হয়েছে';fields.innerHTML='<p>আপনার নতুন ৪ সংখ্যার PIN সংরক্ষিত হয়েছে। গোপন পুনরুদ্ধার PIN অপরিবর্তিত আছে।</p>';actions.innerHTML='';button('অ্যাপ খুলুন',unlock)});button('লগইনে ফিরে যান',login,true)}
- if(!localStorage.getItem(PIN_KEY)){setup()}else{login()}
-})();
-</script>
-
-</body></html>
+const KEY='masjid_screenshot_style_v2',months=['জানু','ফেব্রু','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টে','অক্টো','নভে','ডিসে'],fullMonths=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+let db=JSON.parse(localStorage.getItem(KEY)||'{"members":[],"txns":[],"staff":[],"settings":{},"viewer":"86PCSTCR"}');
+const $=x=>document.getElementById(x),today=()=>new Date().toISOString().slice(0,10),fmt=n=>'৳ '+Number(n||0).toLocaleString('en-US');
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function go(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));document.querySelectorAll('.bottom-nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===id||(b.dataset.tab==='more'&&['reports','committee','install','about','settings'].includes(id))));const titles={dashboard:'ড্যাশবোর্ড',members:'সদস্য ও চাঁদা',transactions:'আয়-ব্যয়ের লেনদেন',reports:'মাসিক রিপোর্ট',committee:'কমিটি ও কর্মী',install:'অ্যাপ ইনস্টল করুন',about:'আমার সম্পর্কে',settings:'সেটিংস',more:'আরও'};$('pageTitle').textContent=titles[id]||'মসজিদ হিসাব';$('mobilePageTitle').textContent=titles[id]||'মসজিদ হিসাব';if(id==='reports')renderReport();if(id==='members')renderMembers();if(id==='transactions')renderTransactions();window.scrollTo(0,0)}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>{go(b.dataset.page);document.body.classList.remove('menu-open')});
+$('menuToggle').onclick=()=>document.body.classList.toggle('menu-open');
+$('menuBackdrop').onclick=()=>document.body.classList.remove('menu-open');
+function fillYears(){let y=new Date().getFullYear();['memberYear','chartYear'].forEach(id=>$(id).innerHTML=Array.from({length:7},(_,i)=>`<option ${y-3+i===y?'selected':''}>${y-3+i}</option>`).join(''));$('reportYear').value=y;$('reportMonth').innerHTML=fullMonths.map((m,i)=>`<option value="${i}">${m}</option>`).join('');$('reportMonth').value=new Date().getMonth();$('mDate').value=today();$('tDate').value=today()}
+function table(rows,heads){if(!rows.length)return '<div class="empty">এখানে কোনো তথ্য নেই।</div>';return `<div class="tablewrap"><table><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`}
+$('memberForm').onsubmit=e=>{e.preventDefault();let id=$('memberId').value,m={id:id||uid(),name:$('mName').value.trim(),phone:$('mPhone').value,address:$('mAddress').value,fee:+$('mFee').value,date:$('mDate').value,paid:{}};if(id){let old=db.members.find(x=>x.id===id);m.paid=old?.paid||{};db.members=db.members.map(x=>x.id===id?m:x)}else db.members.push(m);resetMember();save();alert('সদস্য সংরক্ষিত হয়েছে')};
+function resetMember(){$('memberForm').reset();$('memberId').value='';$('mFee').value=0;$('mDate').value=today()}
+function editMember(id){let m=db.members.find(x=>x.id===id);$('memberId').value=id;$('mName').value=m.name;$('mPhone').value=m.phone;$('mAddress').value=m.address;$('mFee').value=m.fee;$('mDate').value=m.date;$('memberForm').scrollIntoView({behavior:'smooth'})}
+function deleteMember(id){if(confirm('সদস্য মুছবেন?')){db.members=db.members.filter(m=>m.id!==id);save()}}
+function markPaid(id,month){let m=db.members.find(x=>x.id===id),year=+$('memberYear').value,key=year+'-'+String(month+1).padStart(2,'0'),old=m.paid[key]||0,amount=prompt(`${fullMonths[month]} মাসের জমার পরিমাণ লিখুন`,old||m.fee);if(amount===null)return;let n=+amount;if(n<0||!Number.isFinite(n))return alert('সঠিক অঙ্ক দিন');m.paid[key]=n;let tx=db.txns.find(t=>t.memberId===id&&t.monthKey===key);if(n>0){if(tx){tx.amount=n}else db.txns.push({id:uid(),type:'income',category:'মাসিক চাঁদা',amount:n,person:m.name,date:key+'-01',method:'নগদ',note:'মাসিক চাঁদা',memberId:id,monthKey:key})}else if(tx)db.txns=db.txns.filter(t=>t.id!==tx.id);save()}
+function renderMembers(){let year=+$('memberYear').value,q=$('memberSearch').value.toLowerCase(),list=db.members.filter(m=>(m.name+' '+m.phone).toLowerCase().includes(q));$('memberCount').textContent=list.length+' জন সদস্য';$('memberTable').innerHTML=table(list.map(m=>{let paid=Object.entries(m.paid||{}).filter(([k])=>k.startsWith(year+'-')).reduce((s,[k,v])=>s+v,0);return `<tr><td><b>${esc(m.name)}</b><br><small>${esc(m.phone)}</small></td><td>${fmt(m.fee)}</td>${months.map((mo,i)=>{let k=year+'-'+String(i+1).padStart(2,'0'),v=m.paid?.[k]||0;return `<td><button class="${v?'secondary':'outline'}" onclick="markPaid('${m.id}',${i})" title="চাঁদা জমা/সম্পাদনা">${v?fmt(v):'—'}</button></td>`}).join('')}<td>${fmt(paid)}</td><td><button class="secondary" onclick="editMember('${m.id}')">এডিট</button> <button class="danger" onclick="deleteMember('${m.id}')">×</button></td></tr>`}),['সদস্য','মাসিক হার',...months,'মোট জমা','কাজ'])}
+$('memberSearch').oninput=renderMembers;
+$('txnForm').onsubmit=e=>{e.preventDefault();db.txns.push({id:uid(),type:$('tType').value,category:$('tCategory').value,amount:+$('tAmount').value,person:$('tPerson').value,date:$('tDate').value,method:$('tMethod').value,note:$('tNote').value});$('txnForm').reset();$('tDate').value=today();save();alert('লেনদেন সংরক্ষিত হয়েছে')};
+function renderTransactions(){let filter=$('txnFilter').value,month=$('txnMonth').value;let arr=db.txns.filter(t=>(filter==='all'||t.type===filter)&&(!month||t.date.startsWith(month))).sort((a,b)=>b.date.localeCompare(a.date));$('txnTable').innerHTML=table(arr.map(t=>`<tr><td>${esc(t.date)}</td><td><span class="pill">${t.type==='income'?'আয়':'ব্যয়'}</span></td><td>${esc(t.category)}</td><td>${esc(t.person)}</td><td>${fmt(t.amount)}</td><td>${esc(t.method)}</td><td><button class="danger" onclick="delTxn('${t.id}')">মুছুন</button></td></tr>`),['তারিখ','ধরন','বিবরণ','নাম','পরিমাণ','পদ্ধতি','অ্যাকশন'])}
+function delTxn(id){if(confirm('লেনদেন মুছবেন?')){db.txns=db.txns.filter(t=>t.id!==id);save()}}
+function renderReport(){let y=+$('reportYear').value,mo=+$('reportMonth').value,key=y+'-'+String(mo+1).padStart(2,'0'),arr=db.txns.filter(t=>t.date.startsWith(key)),inc=arr.filter(t=>t.type==='income'),exp=arr.filter(t=>t.type==='expense'),a=inc.reduce((s,t)=>s+t.amount,0),b=exp.reduce((s,t)=>s+t.amount,0),paid=inc.filter(t=>t.category==='মাসিক চাঁদা').reduce((s,t)=>s+t.amount,0);$('reportStats').innerHTML=[['চাঁদা আদায়',paid],['সাধারণ আয়',a-paid],['মোট বকেয়া',db.members.reduce((s,m)=>s+Math.max(0,m.fee-(m.paid?.[key]||0)),0)],['আয় - ব্যয়',a-b]].map(([k,v])=>`<div class="card stat"><div><small>${k}</small><strong>${fmt(v)}</strong></div></div>`).join('');$('reportTxns').innerHTML=table(arr.map(t=>`<tr><td>${esc(t.date)}</td><td>${t.type==='income'?'আয়':'ব্যয়'}</td><td>${esc(t.category)}</td><td>${esc(t.person)}</td><td>${fmt(t.amount)}</td></tr>`),['তারিখ','ধরন','বিবরণ','নাম','পরিমাণ']);let due=db.members.filter(m=>m.fee>(m.paid?.[key]||0));$('reportDues').innerHTML=table(due.map(m=>`<tr><td>${esc(m.name)}</td><td>${fmt(m.fee)}</td><td>${fmt(m.paid?.[key]||0)}</td><td>${fmt(m.fee-(m.paid?.[key]||0))}</td></tr>`),['সদস্য','মাসিক চাঁদা','জমা','বকেয়া'])}
+$('staffForm').onsubmit=e=>{e.preventDefault();db.staff.push({id:uid(),name:$('staffName').value,role:$('staffRole').value,phone:$('staffPhone').value,salary:+$('staffSalary').value});$('staffForm').reset();save()};
+function renderStaff(){$('staffTable').innerHTML=table(db.staff.map(s=>`<tr><td>${esc(s.name)}</td><td>${esc(s.role)}</td><td>${esc(s.phone)}</td><td>${fmt(s.salary)}</td><td><button class="danger" onclick="removeStaff('${s.id}')">মুছুন</button></td></tr>`),['নাম','দায়িত্ব','মোবাইল','বেতন','কাজ'])}
+function removeStaff(id){if(confirm('মুছবেন?')){db.staff=db.staff.filter(s=>s.id!==id);save()}}
+function drawChart(){let y=+$('chartYear').value;$('chart').innerHTML=months.map((m,i)=>{let key=y+'-'+String(i+1).padStart(2,'0'),a=db.txns.filter(t=>t.type==='income'&&t.date.startsWith(key)).reduce((s,t)=>s+t.amount,0),b=db.txns.filter(t=>t.type==='expense'&&t.date.startsWith(key)).reduce((s,t)=>s+t.amount,0),max=Math.max(1,...months.map((_,j)=>{let k=y+'-'+String(j+1).padStart(2,'0');return Math.max(db.txns.filter(t=>t.date.startsWith(k)).reduce((s,t)=>s+t.amount,0),1)}));return `<div class="barbox"><div style="display:flex;align-items:end;gap:3px;height:100%;width:100%;justify-content:center"><div class="bar" style="height:${Math.max(1,a/max*100)}%" title="আয় ${a}"></div><div class="bar exp" style="height:${Math.max(1,b/max*100)}%" title="ব্যয় ${b}"></div></div><span class="barlabel">${m}</span></div>`}).join('')}
+function renderDash(){let inc=db.txns.filter(t=>t.type==='income'),exp=db.txns.filter(t=>t.type==='expense'),sum=x=>x.reduce((s,t)=>s+t.amount,0),a=sum(inc),b=sum(exp),dues=inc.filter(t=>t.category==='মাসিক চাঁদা'),jum=inc.filter(t=>t.category==='জুমার দান');$('dashDues').textContent=fmt(sum(dues));$('dashIncome').textContent=fmt(a);$('dashExpense').textContent=fmt(b);$('dashBalance').textContent=fmt(a-b);$('jummaTotal').textContent=fmt(sum(jum));let month=today().slice(0,7);$('jummaMonth').textContent=fmt(sum(jum.filter(t=>t.date.startsWith(month))));let recent=[...db.txns].sort((x,y)=>y.date.localeCompare(x.date)).slice(0,6);$('recent').innerHTML=table(recent.map(t=>`<tr><td>${esc(t.date)}</td><td>${t.type==='income'?'আয়':'ব্যয়'}</td><td>${esc(t.category)}</td><td>${fmt(t.amount)}</td></tr>`),['তারিখ','ধরন','বিবরণ','পরিমাণ'])}
+function renderAll(){renderDash();renderMembers();renderTransactions();renderStaff();drawChart();$('viewerCode').textContent=db.viewer;$('mosqueLabel').textContent=db.settings.name||'মসজিদ হিসাব';$('mobileMosqueName').textContent=db.settings.name||'মসজিদ';$('mosqueName').value=db.settings.name||'';$('mosqueAddress').value=db.settings.address||'';if($('reports').classList.contains('active'))renderReport()}
+function newCode(){db.viewer=Math.random().toString(36).slice(2,10).toUpperCase();save()}
+function copyCode(){navigator.clipboard?.writeText(db.viewer).then(()=>alert('কোড কপি হয়েছে')).catch(()=>alert('ভিউয়ার কোড: '+db.viewer))}
+function downloadBackup(){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.href=u;a.download='masjid-hisab-backup.json';a.click();URL.revokeObjectURL(u)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.members||!x.txns||!x.staff)throw 0;if(confirm('বর্তমান তথ্য প্রতিস্থাপন হবে। চালাবেন?')){db=x;save();alert('ব্যাকআপ ফিরেছে')}}catch(_){alert('ব্যাকআপ ফাইল সঠিক নয়')}};r.readAsText(f)}
+function saveSettings(){db.settings={name:$('mosqueName').value,address:$('mosqueAddress').value};save();alert('সেটিংস সংরক্ষিত')}
+function wipe(){if(confirm('সব তথ্য মুছে ফেলবেন?')){db={members:[],txns:[],staff:[],settings:{},viewer:'86PCSTCR'};save()}}
+function csv(rows,name){let content='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n'),a=document.createElement('a'),u=URL.createObjectURL(new Blob([content],{type:'text/csv;charset=utf-8'}));a.href=u;a.download=name;a.click();URL.revokeObjectURL(u)}
+function exportTransactions(){csv([['তারিখ','ধরন','খাত','নাম','পরিমাণ','পদ্ধতি','নোট'],...db.txns.map(t=>[t.date,t.type,t.category,t.person,t.amount,t.method,t.note])],'masjid-transactions.csv')}
+function exportMembers(){let y=+$('memberYear').value;csv([['সদস্য','মোবাইল','মাসিক চাঁদা',...fullMonths,'মোট'],...db.members.map(m=>[m.name,m.phone,m.fee,...months.map((_,i)=>m.paid?.[y+'-'+String(i+1).padStart(2,'0')]||0),Object.entries(m.paid||{}).filter(([k])=>k.startsWith(y+'-')).reduce((s,[k,v])=>s+v,0)])],'masjid-members.csv')}
+fillYears();renderAll();
+</script></body></html>
